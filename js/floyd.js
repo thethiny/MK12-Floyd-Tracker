@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const floydDataCard = document.getElementById("floyd-data-card");
     const profileChallengesCard = document.getElementById("profile-challenges");
+    const hintsSection = document.getElementById("hints-section");
+    const fatalitiesSection = document.getElementById("fatalities-section");
     const loadingMessage = document.getElementById("loading-message");
     const errorMessage = document.getElementById("error-message");
 
@@ -36,6 +38,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("wins").textContent = parsed.victories;
         document.getElementById("losses").textContent = parsed.losses;
         document.getElementById("floyd-encounters").textContent = `Times Encountered Floyd: ${raw["Total Times Encountered Floyd"]}`;
+        document.getElementById("floyd-last-state").textContent = `Floyd Last Match: ${raw["Floyd Last Battle State"]}`;
+        document.getElementById("floyd-matches-till").textContent = `${parsed["next_floyd_clue"]}`;
 
         // Create challenge checkboxes and labels
         const challengeSection = document.querySelector(".challenge-section");
@@ -101,8 +105,39 @@ document.addEventListener("DOMContentLoaded", async function () {
             challengesList.appendChild(listItem);
         });
 
-        profileChallengesCard.classList.remove("hidden"); // Show Profile Challenges Card
+        profileChallengesCard.classList.remove("hidden");
 
+        // Add Hints
+        const hintsList = document.getElementById("hints-list");
+        data.data.hints.forEach(hint => {
+            const listItem = document.createElement("li");
+            listItem.textContent = hint;
+            hintsList.appendChild(listItem);
+        });
+        hintsSection.classList.remove("hidden");
+
+        // Add Fatalities & Animalities
+        const fatalitiesList = document.getElementById("fatalities-list");
+
+        if (raw["Floyd Fatalities Tracker"]) {
+            Object.entries(raw["Floyd Fatalities Tracker"]).forEach(([character, count]) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Fatalities as ${character}: ${count}`;
+                fatalitiesList.appendChild(listItem);
+            });
+        }
+
+        if (raw["Floyd Animalities Tracker"]) {
+            Object.entries(raw["Floyd Animalities Tracker"]).forEach(([character, count]) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Animalities as ${character}: ${count}`;
+                fatalitiesList.appendChild(listItem);
+            });
+        }
+
+        fatalitiesSection.classList.remove("hidden");
+
+        // Show Data Sections
         floydDataCard.classList.remove("hidden");
     } catch (error) {
         errorMessage.textContent = `Error: ${error.message}`;

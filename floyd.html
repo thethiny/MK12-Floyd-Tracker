@@ -16,7 +16,7 @@
         <div id="floyd-data-card" class="floyd-data-card hidden">
             <div class="profile-container">
                 <div class="profile-circle">
-                    <img id="profile-image" src="https://picsum.photos/200" alt="User Profile">
+                    <img id="profile-image" src="assets/PinkFloyd-Square.png" alt="User Profile">
                 </div>
             </div>
             <h2 id="username">Username</h2>
@@ -25,17 +25,31 @@
             <div class="win-loss">
                 <span id="wins">0</span> W - <span id="losses">0</span> L
             </div>
+            <p id="floyd-last-state" class="floyd-last-state">Floyd Last Match: Loading...</p>
             <p id="floyd-encounters" class="floyd-encounters">Times Encountered Floyd: Loading...</p>
             <div class="challenge-section">
                 <span>Challenges Completed:</span>
                 <div class="checkbox-group" id="challenge-checkboxes"></div>
             </div>
+            <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
         </div>
 
         <!-- Profile Challenges Card -->
         <div id="profile-challenges" class="profile-challenges-card hidden">
             <h2>Profile Challenges</h2>
             <ul id="challenges-list"></ul>
+        </div>
+
+        <!-- Hints Section -->
+        <div id="hints-section" class="info-card hidden">
+            <h2>What to Do Next</h2>
+            <ul id="hints-list"></ul>
+        </div>
+
+        <!-- Fatalities & Animalities Section -->
+        <div id="fatalities-section" class="info-card hidden">
+            <h2>Fatalities & Animalities</h2>
+            <ul id="fatalities-list"></ul>
         </div>
 
         <p id="loading-message">Fetching Floyd Data...</p>
