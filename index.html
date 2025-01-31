@@ -5,21 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floyd Tracker</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/sidebar.css" /> <!-- Sidebar styles -->
 </head>
 <body>
+    <!-- Sidebar -->
+<div class="sidebar" id="history-sidebar">
+    <button class="toggle-sidebar inside" id="toggle-sidebar-inside">X</button>
+    <h2>History</h2>
+    <ul id="history-list"></ul>
+    <button class="clear-history" id="clear-history">Clear All</button>
+</div>
+
+
+    <!-- Main container -->
     <div class="container">
         <h1>Floyd Tracker</h1>
-        <div class="logo"></div> <!-- The image is now set via background-image -->
+        <div class="logo"></div>
         <input type="text" id="username" placeholder="Enter username">
         <div class="platforms" id="platforms"></div>
         <p id="selected-platform" class="selected-platform">No platform selected</p>
-        <button class="track-btn" id="track">Track!</button>
+        <div class="buttons-container">
+            <button class="track-btn" id="track">Track!</button>
+            <button class="track-btn" id="toggle-sidebar-outside">History</button>
+        </div>
         <p id="platform-description" class="platform-description">Select a platform to see details.</p>
         <p id="error-message" class="error-message"></p>
         <div class="loading-overlay" id="loading"><div class="loading-spinner"></div></div>
         <p class="maintainer">Maintained by <a href="https://twitter.com/thethiny" target="_blank">@thethiny on Twitter/X</a></p>
     </div>
+
     <script src="js/platforms.js"></script>
     <script src="js/id.js"></script>
+    <script src="js/history.js"></script>
 </body>
 </html>
