@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const platform = urlParams.get("platform");
 
     const floydDataCard = document.getElementById("floyd-data-card");
+    const profileChallengesCard = document.getElementById("profile-challenges");
     const loadingMessage = document.getElementById("loading-message");
     const errorMessage = document.getElementById("error-message");
 
@@ -23,19 +24,22 @@ document.addEventListener("DOMContentLoaded", async function () {
             throw new Error(data.error || "Invalid response");
         }
 
+        console.log("Full API Response:", data); // Log the full response
+
         const parsed = data.data.parsed;
+        const raw = data.data.raw;
 
         // Update UI
         document.getElementById("username").textContent = data.user.username;
-        document.getElementById("user-id").textContent = `Floyd ID: ${data.user.user_id}`;
+        // document.getElementById("user-id").textContent = `Floyd ID: ${data.user.user_id}`; // Commented out
         document.getElementById("hydra-username").textContent = `WBID: ${data.user.mk12.hydra_username}`;
         document.getElementById("wins").textContent = parsed.victories;
         document.getElementById("losses").textContent = parsed.losses;
+        document.getElementById("floyd-encounters").textContent = `Times Encountered Floyd: ${raw["Total Times Encountered Floyd"]}`;
 
         // Create challenge checkboxes and labels
         const challengeSection = document.querySelector(".challenge-section");
 
-        // Wrap checkboxes and labels in a container
         const checkboxContainer = document.createElement("div");
         checkboxContainer.classList.add("checkbox-container");
 
@@ -57,13 +61,48 @@ document.addEventListener("DOMContentLoaded", async function () {
             checkboxLabels.appendChild(label);
         }
 
-        // Append both checkboxes and labels to the wrapper
         checkboxContainer.appendChild(checkboxGroup);
         checkboxContainer.appendChild(checkboxLabels);
         challengeSection.appendChild(checkboxContainer);
 
+        // Add Profile Challenges
+        const challengesList = document.getElementById("challenges-list");
+        const challengeDescriptions = {
+            "Fatal Finish": "Do 1 Fatality with 5 characters",
+            "You Finish Yet???": "Do 5 Fatalities with 1 character",
+            "Inner Beast": "Do 2 animalities with 1 character",
+            "Shaolin Monks": "Klassic Ladder as Liu Kang With Kung Lao Kameo",
+            "Door Buster": "Succeed in Baraka's Test Your Might (Chapter 5, Trapped) in Story Mode",
+            "Climb The Pyramid": "Replay Chapter 15 and reach the top of the Pyramid",
+            "Challenge Accepted": "Earn 20 points from Towers of Time Daily/Weekly Challenges",
+            "Quest Keeper": "Complete a Daily Challenge 2 times"
+        };
 
-        // Show data card
+        const challenges = [
+            { name: "Fatal Finish", key: "fatal_finish" },
+            { name: "You Finish Yet???", key: "you_finish_yet" },
+            { name: "Inner Beast", key: "inner_beast" },
+            { name: "Shaolin Monks", key: "shaolin" },
+            { name: "Door Buster", key: "door_buster" },
+            { name: "Climb The Pyramid", key: "chapter_15" },
+            { name: "Challenge Accepted", key: "tot_points" },
+            { name: "Quest Keeper", key: "daily" },
+        ];
+
+        challenges.forEach(challenge => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
+
+            // Click to show description
+            listItem.onclick = () => {
+                alert(`${challenge.name}: ${challengeDescriptions[challenge.name]}`);
+            };
+
+            challengesList.appendChild(listItem);
+        });
+
+        profileChallengesCard.classList.remove("hidden"); // Show Profile Challenges Card
+
         floydDataCard.classList.remove("hidden");
     } catch (error) {
         errorMessage.textContent = `Error: ${error.message}`;

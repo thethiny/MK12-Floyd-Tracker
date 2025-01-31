@@ -11,6 +11,8 @@
 <body>
     <div class="container">
         <h1>Floyd Tracker</h1>
+
+        <!-- Main Floyd Card -->
         <div id="floyd-data-card" class="floyd-data-card hidden">
             <div class="profile-container">
                 <div class="profile-circle">
@@ -18,16 +20,24 @@
                 </div>
             </div>
             <h2 id="username">Username</h2>
-            <p id="user-id">Floyd ID: Loading...</p>
-            <p id="hydra-username" class="hydra">Hydra Username: Loading...</p>
+            <!-- <p id="user-id">Floyd ID: Loading...</p> --> <!-- Floyd ID Removed -->
+            <p id="hydra-username" class="hydra">WBID: Loading...</p>
             <div class="win-loss">
                 <span id="wins">0</span> W - <span id="losses">0</span> L
             </div>
+            <p id="floyd-encounters" class="floyd-encounters">Times Encountered Floyd: Loading...</p>
             <div class="challenge-section">
                 <span>Challenges Completed:</span>
                 <div class="checkbox-group" id="challenge-checkboxes"></div>
             </div>
         </div>
+
+        <!-- Profile Challenges Card -->
+        <div id="profile-challenges" class="profile-challenges-card hidden">
+            <h2>Profile Challenges</h2>
+            <ul id="challenges-list"></ul>
+        </div>
+
         <p id="loading-message">Fetching Floyd Data...</p>
         <p id="error-message" class="error-message hidden"></p>
     </div>
