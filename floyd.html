@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floyd Data</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/floyd.css">
+    <script defer src="js/floyd.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Floyd Tracker</h1>
+        <div id="floyd-data-card" class="floyd-data-card hidden">
+            <div class="profile-container">
+                <div class="profile-circle">
+                    <img id="profile-image" src="https://picsum.photos/200" alt="User Profile">
+                </div>
+            </div>
+            <h2 id="username">Username</h2>
+            <p id="user-id">Floyd ID: Loading...</p>
+            <p id="hydra-username" class="hydra">Hydra Username: Loading...</p>
+            <div class="win-loss">
+                <span id="wins">0</span> W - <span id="losses">0</span> L
+            </div>
+            <div class="challenge-section">
+                <span>Challenges Completed:</span>
+                <div class="checkbox-group" id="challenge-checkboxes"></div>
+            </div>
+        </div>
+        <p id="loading-message">Fetching Floyd Data...</p>
+        <p id="error-message" class="error-message hidden"></p>
+    </div>
+</body>
+</html>
