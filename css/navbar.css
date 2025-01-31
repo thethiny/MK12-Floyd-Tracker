@@ -1,0 +1,25 @@
+.navbar {
+    width: 100%;
+    background: #c46788;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 10px 15px;
+    transition: background 0.3s;
+}
+
+.nav-link:hover {
+    background: #e08baf;
+    border-radius: 5px;
+}

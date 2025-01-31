@@ -12,6 +12,8 @@ body {
     min-height: 100vh;
     background: #d67999;
     color: white;
+    padding-top: 5em;
+    padding-bottom: 5em;
 }
 
 .container {
