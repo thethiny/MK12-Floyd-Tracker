@@ -18,6 +18,11 @@ function findStoredFloydId(username, platform) {
     return entry ? entry.floydId : null;
 }
 
+// Redirect function
+function redirectToFloyd(username, platform, userId) {
+    window.location.href = `/floyd?username=${encodeURIComponent(username)}&platform=${encodeURIComponent(platform)}&user_id=${encodeURIComponent(userId)}`;
+}
+
 // Initialize platform buttons
 platforms.forEach(platform => {
     const btn = document.createElement('button');
@@ -47,8 +52,7 @@ document.getElementById('track').onclick = async () => {
     // Check if the Floyd ID is already stored
     const cachedFloydId = findStoredFloydId(username, selectedPlatform.name);
     if (cachedFloydId) {
-        errorMessage.textContent = `User ID (Cached): ${cachedFloydId}`;
-        alert(`Floyd ID: ${cachedFloydId}`);
+        redirectToFloyd(username, selectedPlatform.platform_id, cachedFloydId);
         return;
     }
 
@@ -60,8 +64,8 @@ document.getElementById('track').onclick = async () => {
         const data = await response.json();
 
         if (response.ok) {
-            errorMessage.textContent = `User ID: ${data.user_id}`;
             addHistory(username, selectedPlatform.name, data.user_id); // Store in history
+            redirectToFloyd(username, selectedPlatform.platform_id, data.user_id);
         } else {
             errorMessage.textContent = `Error: ${data.error}`;
         }

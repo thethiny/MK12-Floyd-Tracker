@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     historyList.addEventListener("click", function (event) {
         if (event.target.tagName === "LI") {
             const floydId = event.target.getAttribute("data-id");
-            alert(`Floyd ID: ${floydId}`);
+            const [username, platform] = event.target.textContent.split(" - ");
+            redirectToFloyd(username, platform, floydId);
         }
     });
 
