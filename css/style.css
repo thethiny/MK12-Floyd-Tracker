@@ -30,10 +30,11 @@ h1 {
 .logo {
     width: 320px;
     height: 320px;
-    background-image: url('https://picsum.photos/320');
+    background-image: url('../assets/find_floyd.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    margin-bottom: 15px;
 }
 input {
     width: 100%;
