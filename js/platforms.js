@@ -25,8 +25,8 @@ let epicGames = {
 let xbox = {
     name: 'Xbox',
     platform_id: 'xsx',
-    description: 'Xbox is not supported, please use WB.',
-    enabled: false,
+    description: 'Get your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>.',
+    enabled: true,
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Xbox_Logo.svg/372px-Xbox_Logo.svg.png'
 };
 
@@ -57,7 +57,7 @@ let wbFriend = {
 let wbIncoming = {
     name: 'Warner Bros ID (Friend Request)',
     platform_id: 'wb_incoming',
-    description: 'Add `thethinyapi` on <a href="https://account.wbgames.com/friends" target="_blank">WB Friends</a> and that\'s it. If it\'s not working then cancel the request and add again.',
+    description: 'Add `thethinyapi` on <a href="https://account.wbgames.com/friends" target="_blank">WB Friends</a> and that\'s it. If it\'s not working then cancel the request and add again. You don\'t need to wait for me to accept it.',
     enabled: true,
     logo: 'https://cdn.cookielaw.org/logos/1b21e05d-c206-4e0b-970e-2d73a23e42e8/f00cc75c-15c8-451e-831b-8ee683b4b250/5fedc951-d984-480e-a455-d2e40dd3af75/WB_Logo.png'
 };
@@ -69,6 +69,6 @@ const platforms = [
     xbox,
     nintendoSwitch,
     wbNetwork,
-    wbFriend,
+    // wbFriend,
     wbIncoming
 ];
