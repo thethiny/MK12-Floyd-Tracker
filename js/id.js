@@ -6,14 +6,9 @@ const loadingOverlay = document.getElementById('loading');
 const trackButton = document.getElementById('track');
 let selectedPlatform = null;
 
-// Load stored history from localStorage
-function getStoredHistory() {
-    return JSON.parse(localStorage.getItem("floydHistory")) || [];
-}
-
 // Check if a username+platform combo exists in history
 function findStoredFloydId(username, platform) {
-    const history = getStoredHistory();
+    const history = getHistory();
     const entry = history.find(item => item.username === username && item.platform === platform);
     return entry ? entry.floydId : null;
 }
@@ -64,7 +59,7 @@ document.getElementById('track').onclick = async () => {
         const data = await response.json();
 
         if (response.ok) {
-            addHistory(username, selectedPlatform.name, data.user_id); // Store in history
+            addHistory(username, selectedPlatform.name, selectedPlatform.platform_id, data.user_id); // Store in history
             redirectToFloyd(username, selectedPlatform.platform_id, data.user_id);
         } else {
             errorMessage.textContent = `Error: ${data.error}`;

@@ -1,3 +1,5 @@
+const currentHistoryVersion = 2;
+
 document.addEventListener("DOMContentLoaded", function () {
     const historySidebar = document.getElementById("history-sidebar");
     const toggleOutside = document.getElementById("toggle-sidebar-outside");
@@ -15,8 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
     historyList.addEventListener("click", function (event) {
         if (event.target.tagName === "LI") {
             const floydId = event.target.getAttribute("data-id");
-            const [username, platform] = event.target.textContent.split(" - ");
-            redirectToFloyd(username, platform, floydId);
+            const platformId = event.target.getAttribute("data-platform");
+            const [username, platformName] = event.target.textContent.split(" - ");
+            redirectToFloyd(username, platformId, floydId);
         }
     });
 
@@ -27,12 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    function addHistory(username, platform, floydId) {
+    function addHistory(username, platform, platform_id, floydId) {
         const existingHistory = getHistory();
-        const newEntry = { username, platform, floydId };
+        const newEntry = { username, platform, platform_id, floydId };
         console.log("Adding", newEntry);
 
-        if (!existingHistory.some(entry => entry.username === username && entry.platform === platform)) {
+        if (!existingHistory.some(entry => entry.username === username && entry.platform_id === platform_id)) {
             existingHistory.push(newEntry);
             saveHistory(existingHistory);
             loadHistory(); // Refresh the UI
@@ -40,14 +43,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function saveHistory(history) {
-        console.log("Saving");
+        console.log(`Saving History Version ${currentHistoryVersion}`);
         localStorage.setItem("floydHistory", JSON.stringify(history));
+        localStorage.setItem("floydHistoryVersion", JSON.stringify(currentHistoryVersion));
     }
 
     function getHistory() {
+        const storedHistoryVersion = localStorage.getItem("floydHistoryVersion") || 0;
+        if (storedHistoryVersion < currentHistoryVersion)
+        {
+            console.log(`Detected old history version! ${storedHistoryVersion} < ${currentHistoryVersion}`)
+            return [];
+        }
         const storedHistory = localStorage.getItem("floydHistory");
         return storedHistory ? JSON.parse(storedHistory) : [];
     }
+
 
     function loadHistory() {
         historyList.innerHTML = "";
@@ -63,12 +74,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const listItem = document.createElement("li");
             listItem.textContent = `${entry.username} - ${entry.platform}`;
             listItem.setAttribute("data-id", entry.floydId);
+            listItem.setAttribute("data-platform", entry.platform_id);
             historyList.appendChild(listItem);
         });
     }
 
     loadHistory();
 
-    // Expose addHistory to global scope so other scripts can use it
+    // Expose history functions to global scope so other scripts can use it
     window.addHistory = addHistory;
+    window.getHistory = getHistory;
 });
