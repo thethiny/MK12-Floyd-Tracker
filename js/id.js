@@ -37,8 +37,8 @@ platforms.forEach(platform => {
         selectedPlatformText.textContent = `Selected Platform: ${platform.name}`;
         errorMessage.textContent = '';
 
-        // Disable track button if the selected platform is Xbox or Nintendo Switch
-        trackButton.disabled = platform.platform_id === 'xsx' || platform.platform_id === 'nx';
+        // Disable track button if the selected platform is disabled
+        trackButton.disabled = platform.enabled ? false : true;
     };
 
     platformContainer.appendChild(btn);
