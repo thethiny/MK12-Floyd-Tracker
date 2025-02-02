@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loadingMessage = document.getElementById("loading-message");
     const errorMessage = document.getElementById("error-message");
 
+    const kofiSection = document.getElementById("kofi-section");
+
     if (!username || !userId || !platform) {
         errorMessage.textContent = "Missing required parameters.";
         errorMessage.classList.remove("hidden");
@@ -139,6 +141,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Show Data Sections
         floydDataCard.classList.remove("hidden");
+        kofiSection.classList.remove("hidden");
     } catch (error) {
         errorMessage.textContent = `Error: ${error.message}`;
         errorMessage.classList.remove("hidden");

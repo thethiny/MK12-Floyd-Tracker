@@ -4,11 +4,13 @@
     padding: 10px 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 20px;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 100;
+    text-align: center;
 }
 
 .nav-link {

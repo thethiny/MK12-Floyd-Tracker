@@ -1,0 +1,37 @@
+
+h1 {
+    margin-bottom: 0;
+}
+h4 {
+    text-align: left;
+}
+.faq-item {
+    margin-bottom: 10px;
+    list-style: none; /* Remove bullet points */
+}
+.faq-question {
+    width: 100%;
+    padding: 10px;
+    background: #c46788;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: left;
+}
+.faq-question:hover {
+    background: #e08baf;
+}
+.faq-answer {
+    display: none;
+    background: #b84c79;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    text-align: left;
+}
+.faq-answer.hidden {
+    display: none;
+}

@@ -12,16 +12,17 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://floydtracker.thethiny.xyz/data"> <!-- Update if needed -->
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/floyd.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <script defer src="js/floyd.js"></script>
+    <link rel="stylesheet" href="css/style.css?02-02-25_03">
+    <link rel="stylesheet" href="css/floyd.css?02-02-25_03">
+    <link rel="stylesheet" href="css/navbar.css?02-02-25_03">
+    <script defer src="js/floyd.js?02-02-25_03"></script>
 </head>
 
 <body>
     <nav class="navbar">
-        <a href="/" class="nav-link">Back to Main</a>
-        <a href="https://docs.google.com/spreadsheets/d/1Yh5hLG2oi85zvyFvLkl4cCNViDRHX83y-Qn1LdlGozg" class="nav-link" target="_blank">All Clues Spreadsheet</a>
+        <a href="/" class="nav-link">Main Menu</a>
+        <a href="https://thethiny.xyz/floydsheet" class="nav-link" target="_blank">Clues Spreadsheet</a>
+        <a href="/faqs" class="nav-link">FAQs</a>
     </nav>
 
     <div class="container">
@@ -49,9 +50,14 @@
             <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
         </div>
 
+        <div id="kofi-section" class="kofi-section hidden">
+            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support the tracker?', '#C46788', 'D1D219Y0XH');kofiwidget2.draw();</script> 
+        </div>
+
         <!-- Profile Challenges Card -->
         <div id="profile-challenges" class="profile-challenges-card hidden">
             <h2>Profile Challenges</h2>
+            <p>These are challenges 30 to 37. You <b>may or may not</b> have them active, this is just to track if you've done them or not.</p>
             <ul id="challenges-list"></ul>
         </div>
 

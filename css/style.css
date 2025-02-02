@@ -151,6 +151,7 @@ input {
 .maintainer {
     margin-top: 20px;
     font-size: 0.9rem;
+    margin-bottom: 10px;
 }
 .maintainer a {
     color: #ffffff;
@@ -164,4 +165,8 @@ input {
     .container {
         width: 100%;
     }
+}
+
+a.kofi-button {
+    margin-top: 1em;
 }
