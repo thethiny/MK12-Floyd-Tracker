@@ -1,30 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
     const clueList = document.getElementById("clue-items");
+    const storageKey = `clue-states`;
+
+    // Load saved state
+    let savedState = JSON.parse(localStorage.getItem(storageKey)) || {};
 
     clues.forEach(clue => {
         const li = document.createElement("li");
         li.classList.add("clue-item");
 
-        // Create button parent
         const buttonParent = document.createElement("div");
         buttonParent.classList.add("clue-parent");
         li.appendChild(buttonParent);
 
-        // Create button for clue name
         const button = document.createElement("button");
         button.classList.add("clue-name");
         button.textContent = `${clue.id}: ${clue.name}`;
+        button.dataset.state = savedState[clue.id] || "";
         buttonParent.appendChild(button);
 
         const innerButtonsParent = document.createElement("div");
         innerButtonsParent.classList.add("clue-buttons-container");
         buttonParent.appendChild(innerButtonsParent);
 
-        // Create details container
         const detailsContainer = document.createElement("div");
         detailsContainer.classList.add("clue-details", "hidden");
 
-        // Helper function to add a field if it exists
         function addField(label, value, className) {
             if (value) {
                 const field = document.createElement("p");
@@ -34,17 +35,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Append only existing fields
         addField("Requirements", clue.requirements, "clue-requirements");
-        addField("Extra Requirements", clue.additional, "clue-extra-requirements");
+        addField("Hints", clue.additional, "clue-extra-requirements");
         addField("Character Requirement", clue.character, "clue-character");
         addField("Enemy Requirement", clue.enemy, "clue-enemy");
-        addField("Round Requirement", clue.rounds, "clue-rounds");
-        addField("Trigger Info", clue.trigger, "clue-trigger");
+        addField("Round", clue.round, "clue-rounds");
+        addField("Floyd Notification", clue.trigger, "clue-trigger");
 
         li.appendChild(detailsContainer);
 
-        // Action buttons
         const actionsContainer = document.createElement("div");
         actionsContainer.classList.add("clue-actions");
 
@@ -65,28 +64,43 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     button.dataset.state = state;
                     innerButtonsParent.classList.remove("clue-done", "clue-not-working", "clue-unsure");
-                    if (state === "done") innerButtonsParent.classList.add("clue-done");
-                    if (state === "not-working") innerButtonsParent.classList.add("clue-not-working");
-                    if (state === "unsure") innerButtonsParent.classList.add("clue-unsure");
+                    innerButtonsParent.classList.add(`clue-${state}`);
                 }
+
+                // Save state
+                savedState[clue.id] = button.dataset.state;
+                localStorage.setItem(storageKey, JSON.stringify(savedState));
             });
             actionsContainer.appendChild(actionBtn);
         });
 
         innerButtonsParent.appendChild(actionsContainer);
 
-        // Toggle details on button click
+        if (button.dataset.state) {
+            innerButtonsParent.classList.add(`clue-${button.dataset.state}`);
+        }
+
         button.addEventListener("click", function () {
-            detailsContainer.classList.toggle("hidden");
+            let details = this.parentElement.nextElementSibling;
+            details.style.display = details.style.display === "block" ? "none" : "block";
         });
 
         clueList.appendChild(li);
     });
 
-    document.querySelectorAll(".clue-name").forEach(button => {
-        button.addEventListener("click", function () {
-            let details = this.parentElement.nextElementSibling;
-            details.style.display = details.style.display === "block" ? "none" : "block";
+    // Add clear all button
+    const clearAllButton = document.createElement("button");
+    clearAllButton.textContent = "Clear All";
+    clearAllButton.classList.add("clear-all-button");
+    clearAllButton.addEventListener("click", function () {
+        localStorage.removeItem(storageKey);
+        savedState = {};
+        document.querySelectorAll(".clue-name").forEach(button => button.dataset.state = "");
+        document.querySelectorAll(".clue-buttons-container").forEach(container => {
+            container.classList.remove("clue-done", "clue-not-working", "clue-unsure");
         });
     });
+
+    clueList.appendChild(clearAllButton);
+
 });
