@@ -16,6 +16,13 @@ function createNavbar() {
     hamburger.className = 'hamburger';
     hamburger.setAttribute('aria-label', 'Toggle navigation');
 
+    let link = navLinks.shift(); // Remove first element
+    const mainMenuNav = document.createElement("a");
+    mainMenuNav.href = link.href;
+    mainMenuNav.className = 'nav-link';
+    mainMenuNav.textContent = link.text;
+    
+
     // Add hamburger spans
     for (let i = 0; i < 3; i++) {
         const span = document.createElement('span');
@@ -40,6 +47,7 @@ function createNavbar() {
 
     // Add elements to navbar
     navbar.appendChild(hamburger);
+    navbar.appendChild(mainMenuNav);
     navbar.appendChild(navLinksContainer);
 
     // Add click event for hamburger menu
