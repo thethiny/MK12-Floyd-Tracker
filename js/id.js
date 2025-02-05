@@ -56,6 +56,12 @@ document.getElementById('track').onclick = async () => {
 
     try {
         const response = await fetch(`https://thethiny.xyz/mk12/floyd/id?username=${username}&platform=${selectedPlatform.platform_id}`);
+
+        if (response.status === 503) {
+            errorMessage.textContent = 'Service is under maintenance. Please try again soon!';
+            return;
+        }
+
         const data = await response.json();
 
         if (response.ok) {

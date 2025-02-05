@@ -27,7 +27,7 @@ let xbox = {
     platform_id: 'xsx',
     description: 'Get your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>.',
     enabled: true,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Xbox_Logo.svg/372px-Xbox_Logo.svg.png'
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Xbox_one_logo.svg/800px-Xbox_one_logo.svg.png'
 };
 
 let nintendoSwitch = {
