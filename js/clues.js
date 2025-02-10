@@ -40,12 +40,15 @@ function createTwitchEmbed(url) {
     const timeParam = url.match(/\?time=([0-9hms]+)/)?.[1] || null;  // Extract time if available
 
     const iframe = document.createElement("iframe");
-    iframe.innerHTML = `<iframe
+    iframe.innerHTML = `
+    <div style="position: relative; width: 100%; padding-top: 56.25%; overflow: hidden;">
+        <iframe
         src="https://player.twitch.tv/?${type}=${videoId}&parent=localhost&parent=floydtracker.thethiny.xyz&autoplay=false${timeParam ? '&time=' + timeParam : ''}"
-        height="100%"
-        width="100%"
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
         allowfullscreen>
-    </iframe>`;
+        </iframe>
+    </div>
+`;
 
     return iframe;
 }
@@ -61,15 +64,17 @@ function createYoutubeEmbed(url) {
 
     const iframe = document.createElement("iframe");
     iframe.innerHTML = `
-        <iframe
-            width="100%"
-            height="100%"
+        <div style="position: relative; width: 100%; padding-top: 56.25%; overflow: hidden;">
+            <iframe
             src="${embedUrl}"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
             title=""
             frameborder="0"
             allowfullscreen>
-        </iframe>
+            </iframe>
+        </div>
     `;
+
     return iframe;
 }
 
