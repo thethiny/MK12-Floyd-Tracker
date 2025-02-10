@@ -1,3 +1,78 @@
+function createTwitterEmbed(url) {
+    url = url.replace(/x\.com\//, 'twitter.com/');
+    const blockquote = document.createElement('blockquote');
+    blockquote.innerHTML = `<blockquote class="twitter-tweet" data-media-max-width="560">
+    <a href=${url}>Twitter Video</a></blockquote>`
+
+    // If twitter embedder isn't loaded, load it.
+    let scriptTag;
+    scriptTag = document.getElementById("twitter-embed-class");
+    if (!scriptTag)
+    {
+        scriptTag = document.createElement("script");
+        scriptTag.id = "twitter-embed-class";
+        scriptTag.src = "https://platform.twitter.com/widgets.js";
+        scriptTag.onload = () => console.log("Loaded Twitter Embed Loader!");
+        document.body.appendChild(scriptTag); // Must be done after the clues are loaded
+    }
+
+    return blockquote;
+}
+
+function createTwitchEmbed(url) {
+    let videoId = null;
+    let type = null;
+
+    // Detect the type and extract videoId accordingly
+    if (url.includes('/videos/')) {
+        type = 'video';
+        videoId = url.match(/twitch\.tv\/videos\/(\d+)/)?.[1] || null;
+    } else if (url.includes('/channels/')) {
+        type = 'channel';
+        const channelName = url.match(/twitch\.tv\/channels\/([^/]+)/)?.[1] || null;
+        videoId = channelName ? `channel/${channelName}` : null;
+    } else if (url.includes('/collections/')) {
+        type = 'collection';
+        const collectionName = url.match(/twitch\.tv\/collections\/([^/]+)/)?.[1] || null;
+        videoId = collectionName ? `collection/${collectionName}` : null;
+    }
+
+    const timeParam = url.match(/\?time=([0-9hms]+)/)?.[1] || null;  // Extract time if available
+
+    const iframe = document.createElement("iframe");
+    iframe.innerHTML = `<iframe
+        src="https://player.twitch.tv/?${type}=${videoId}&parent=localhost&parent=floydtracker.thethiny.xyz&autoplay=false${timeParam ? '&time=' + timeParam : ''}"
+        height="100%"
+        width="100%"
+        allowfullscreen>
+    </iframe>`;
+
+    return iframe;
+}
+
+function createYoutubeEmbed(url) {
+    const videoId = url.match(/(?:youtube\.com\/(?:shorts|watch\?v=)|youtu\.be\/)([a-zA-Z0-9_-]+)/)?.[1] || null;
+    const timeParam = url.match(/[?&]t=(\d+)/)?.[1] || null;
+
+    
+    if (!videoId) return null;  // If no valid video ID, return null
+    
+    let embedUrl = `https://www.youtube.com/embed/${videoId}${timeParam ? `?start=${timeParam}` : ''}`;
+
+    const iframe = document.createElement("iframe");
+    iframe.innerHTML = `
+        <iframe
+            width="100%"
+            height="100%"
+            src="${embedUrl}"
+            title=""
+            frameborder="0"
+            allowfullscreen>
+        </iframe>
+    `;
+    return iframe;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const clueList = document.getElementById("clue-items");
     const storageKey = `clue-states`;
@@ -26,11 +101,63 @@ document.addEventListener("DOMContentLoaded", function () {
         const detailsContainer = document.createElement("div");
         detailsContainer.classList.add("clue-details", "hidden");
 
+        function parseVideoType(url) {
+            if (!url || !url.startsWith('http')) {
+                return null;
+            }
+
+            if (url.includes('twitter.com')) {
+                return 'twitter';
+            }
+
+            if (url.includes('x.com')) {
+                return 'twitter';
+            }
+
+            if (url.includes('twitch.tv')) {
+                if (url.includes('/video/')) {
+                    return 'twitch video';
+                } else if (url.includes('/channel/')) {
+                    return 'twitch channel';
+                } else if (url.includes('/collection/')) {
+                    return 'twitch collection';
+                } else {
+                    return 'twitch';
+                }
+            }
+
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                return 'youtube';
+            }
+
+            return null;
+        }
+
+
         function addField(label, value, className) {
             if (value) {
+                let urlType = parseVideoType(value);
                 const field = document.createElement("p");
                 field.classList.add(className);
-                field.innerHTML = `<strong>${label}:</strong> ${value}`;
+                if (urlType === null)
+                    field.innerHTML = `<strong>${label}:</strong> ${value}`;
+                else {
+                    let embed;
+                    switch (urlType) {
+                        case "twitter":
+                            embed = createTwitterEmbed(value);
+                            break;
+                        case "twitch":
+                            embed = createTwitchEmbed(value);
+                            break;
+                        case "youtube":
+                            embed = createYoutubeEmbed(value);
+                            break;
+                        default:
+                            throw `Invalid type ${urlType}`;
+                    }
+                    field.innerHTML = `<strong>${label}:</strong><br/>${embed.innerHTML}`;
+                }
                 detailsContainer.appendChild(field);
             }
         }
@@ -41,6 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
         addField("Enemy Requirement", clue.enemy, "clue-enemy");
         addField("Round", clue.round, "clue-rounds");
         addField("Floyd Notification", clue.trigger, "clue-trigger");
+        addField("Video Guide", clue.video, "clue-video");
 
         li.appendChild(detailsContainer);
 
