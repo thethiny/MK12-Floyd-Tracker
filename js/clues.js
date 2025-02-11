@@ -236,4 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     clueList.appendChild(clearAllButton);
 
+    let fullGuideCont = document.getElementById("full-guide-container");
+    fullGuideCont.innerHTML = createYoutubeEmbed("https://www.youtube.com/watch?v=JEV3GP5hTqA").innerHTML;
+    console.log(fullGuideCont);
+
 });
