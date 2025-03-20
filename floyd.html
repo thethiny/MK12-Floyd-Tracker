@@ -13,9 +13,9 @@
     <meta property="og:url" content="https://floydtracker.thethiny.xyz/data"> <!-- Update if needed -->
 
     <link rel="stylesheet" href="css/style.css?02-03-25_01">
-    <link rel="stylesheet" href="css/floyd.css?20-03-25_01">
+    <link rel="stylesheet" href="css/floyd.css?20-03-25_02">
     <link rel="stylesheet" href="css/navbar.css?02-03-25_01">
-    <script defer src="js/floyd.js?20-03-25_01"></script>
+    <script defer src="js/floyd.js?20-03-25_02"></script>
     <script defer src="js/navbar.js?02-03-25_01"></script>
 </head>
 
@@ -40,10 +40,8 @@
             <p id="floyd-last-state" class="floyd-last-state">Floyd Last Match: Loading...</p>
             <p id="floyd-encounters" class="floyd-encounters">Times Encountered Floyd: Loading...</p>
             <div class="challenge-section">
-                <span>Challenges Completed:</span>
-            </div>
-            <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
-            <div class="challenge-legend">
+                <span>Challenges Completed</span>
+                <div class="challenge-legend">
                 <div class="challenge-legend-item">
                     <input type="checkbox" disabled="" data-index="1"> No info
                 </div>
@@ -54,6 +52,14 @@
                     <input type="checkbox" disabled="" data-index="3" checked> Complete
                 </div>
             </div>
+            </div>
+            
+            <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
+            <p class="floyd-legend-info">
+                No info = The server isn't tracking if it's done or not<br/>
+                Inactive = The server knows that you completed it, but it was not part of your challenges.<br/>
+                Complete = You got a floyd notification for this one!
+            </p>
         </div>
 
         <div id="kofi-section" class="kofi-section hidden">
@@ -63,7 +69,7 @@
         <!-- Profile Challenges Card -->
         <div id="profile-challenges" class="profile-challenges-card hidden">
             <h2>Profile Challenges</h2>
-            <p>These are challenges 30 to 37. You <b>may or may not</b> have them active, this is just to track if you've done them or not.</p>
+            <p>This sections tracks challenges 30 to 37. You <b>may or may not</b> have them active.</p>
             <ul id="challenges-list"></ul>
         </div>
 

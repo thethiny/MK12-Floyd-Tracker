@@ -92,12 +92,15 @@ p {
     border-radius: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    text-transform: uppercase; /* Makes it more defined */
+    letter-spacing: 1px;
 }
 
 /* Challenges Section */
 .challenge-section {
     margin-top: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -114,15 +117,32 @@ p {
 }
 
 /* Row of checkboxes */
-.checkbox-group {
+/* .checkbox-group {
     display: flex;
     justify-content: center;
     gap: 5px;
     margin-top: 10px;
     flex-wrap: wrap;
+} */
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
 }
 
+.checkbox-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+
 .challenge-legend {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -153,6 +173,7 @@ p {
     background: transparent;
     cursor: not-allowed;
     transition: background 0.3s, border 0.3s;
+    margin-bottom: 0.5em;
 }
 
 .challenge-legend input {
@@ -174,10 +195,10 @@ p {
 
 
 .checkbox-group input.challenge-inactive, .challenge-legend input.challenge-inactive {
-    color: white;
+    color: #ddd;
     font-weight: bold;
-    border-color: #4d373a;
-    background: #927682;
+    border-color: #3a2a2c;
+    background: #6f545a;
 }
 
 .checkbox-group input:checked, .challenge-legend input:checked {
@@ -268,6 +289,10 @@ p {
     /* margin-top: 10px; */
     color: white;
     font-weight: bold;
+}
+
+.floyd-legend-info {
+    text-align: left;
 }
 
 .info-card {

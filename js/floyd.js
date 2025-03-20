@@ -57,17 +57,26 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // const floydChallengesMax = 10;
         const floydChallengesMax = 37;
+        const rowLimits = [10, 20, 29, 37];
+        let currentRow = document.createElement("div");
+        currentRow.classList.add("checkbox-row");
         for (let i = 1; i <= floydChallengesMax; i++) {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
             checkbox.disabled = true;
             checkbox.checked = parsed.challenges_checklist[i] || false;
             checkbox.dataset.index = i;
-            checkboxGroup.appendChild(checkbox);
 
-            // const label = document.createElement("span");
-            // label.textContent = i;
-            // checkboxLabels.appendChild(label);
+            currentRow.appendChild(checkbox);
+
+            if (rowLimits.includes(i)) {
+                checkboxGroup.appendChild(currentRow);
+                currentRow = document.createElement("div");
+                currentRow.classList.add("checkbox-row");
+            }
+        }
+        if (currentRow.children.length > 0) {
+            checkboxGroup.appendChild(currentRow);
         }
 
         checkboxContainer.appendChild(checkboxGroup);
@@ -98,13 +107,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             { name: "Quest Keeper", key: "daily" },
         ];
 
+        allCheckboxes = document.querySelectorAll(".checkbox-group input")
         challenges.forEach((challenge, challengeIndex) => {
             const listItem = document.createElement("li");
             listItem.textContent = `${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
             
             challengeIndex += 29; // Offset of the profile challenges
             if (parsed[challenge.key] == "Complete") {
-                const checkbox = checkboxGroup.children[challengeIndex];
+                const checkbox = allCheckboxes[challengeIndex];
                 if (checkbox && !checkbox.checked) {
                     checkbox.classList.add("challenge-inactive");
                 }
