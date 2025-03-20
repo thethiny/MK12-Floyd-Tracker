@@ -110,6 +110,7 @@ p {
     flex-direction: column;
     align-items: center;
     gap: 5px;
+    width: 85%;
 }
 
 /* Row of checkboxes */
@@ -118,10 +119,32 @@ p {
     justify-content: center;
     gap: 5px;
     margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.challenge-legend {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1em;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.challenge-legend-item {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 1;
+    flex-grow: 0;
+    gap: 0.5em;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Checkboxes */
-.checkbox-group input {
+.checkbox-group input, .challenge-legend input {
     appearance: none;
     width: 20px;
     height: 20px;
@@ -132,14 +155,39 @@ p {
     transition: background 0.3s, border 0.3s;
 }
 
-.checkbox-group input:checked {
+.challenge-legend input {
+    margin: 0;
+}
+
+.checkbox-group input::after, .challenge-legend input::after {
+    content: attr(data-index);
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+.challenge-legend input::after {
+    content: "1";
+}
+
+
+.checkbox-group input.challenge-inactive, .challenge-legend input.challenge-inactive {
+    color: white;
+    font-weight: bold;
+    border-color: #4d373a;
+    background: #927682;
+}
+
+.checkbox-group input:checked, .challenge-legend input:checked {
     background: #e08baf;
     border-color: #ffb6c1;
     position: relative;
 }
 
-.checkbox-group input:checked::after {
-    content: "✔";
+.checkbox-group input:checked::after, .challenge-legend input:checked::after {
+    /* content: "✔"; */
     font-size: 14px;
     color: white;
     font-weight: bold;
@@ -154,6 +202,7 @@ p {
     display: flex;
     justify-content: center;
     gap: 9px;
+    flex-wrap: wrap;
 }
 
 .checkbox-labels span {

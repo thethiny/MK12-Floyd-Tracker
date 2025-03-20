@@ -52,30 +52,33 @@ document.addEventListener("DOMContentLoaded", async function () {
         const checkboxGroup = document.createElement("div");
         checkboxGroup.classList.add("checkbox-group");
 
-        const checkboxLabels = document.createElement("div");
-        checkboxLabels.classList.add("checkbox-labels");
+        // const checkboxLabels = document.createElement("div");
+        // checkboxLabels.classList.add("checkbox-labels");
 
-        for (let i = 1; i <= 10; i++) {
+        // const floydChallengesMax = 10;
+        const floydChallengesMax = 37;
+        for (let i = 1; i <= floydChallengesMax; i++) {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
             checkbox.disabled = true;
             checkbox.checked = parsed.challenges_checklist[i] || false;
+            checkbox.dataset.index = i;
             checkboxGroup.appendChild(checkbox);
 
-            const label = document.createElement("span");
-            label.textContent = i;
-            checkboxLabels.appendChild(label);
+            // const label = document.createElement("span");
+            // label.textContent = i;
+            // checkboxLabels.appendChild(label);
         }
 
         checkboxContainer.appendChild(checkboxGroup);
-        checkboxContainer.appendChild(checkboxLabels);
+        // checkboxContainer.appendChild(checkboxLabels);
         challengeSection.appendChild(checkboxContainer);
 
         // Add Profile Challenges
         const challengesList = document.getElementById("challenges-list");
         const challengeDescriptions = {
-            "Fatal Finish": "Do 1 Fatality with 5 characters",
-            "You Finish Yet???": "Do 5 Fatalities with 1 character",
+            "Fatal Finish": "Do 5 Fatalities with 1 character",
+            "You Finish Yet???": "Do 1 Fatality with 5 characters",
             "Inner Beast": "Do 2 animalities with 1 character",
             "Shaolin Monks": "Klassic Ladder as Liu Kang With Kung Lao Kameo",
             "Door Buster": "Succeed in Baraka's Test Your Might (Chapter 5, Trapped) in Story Mode",
@@ -95,9 +98,17 @@ document.addEventListener("DOMContentLoaded", async function () {
             { name: "Quest Keeper", key: "daily" },
         ];
 
-        challenges.forEach(challenge => {
+        challenges.forEach((challenge, challengeIndex) => {
             const listItem = document.createElement("li");
             listItem.textContent = `${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
+            
+            challengeIndex += 29; // Offset of the profile challenges
+            if (parsed[challenge.key] == "Complete") {
+                const checkbox = checkboxGroup.children[challengeIndex];
+                if (checkbox && !checkbox.checked) {
+                    checkbox.classList.add("challenge-inactive");
+                }
+            }
 
             // Click to show description
             listItem.onclick = () => {
