@@ -86,8 +86,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Add Profile Challenges
         const challengesList = document.getElementById("challenges-list");
         const challengeDescriptions = {
-            "Fatal Finish": "Do 5 Fatalities with 1 character",
-            "You Finish Yet???": "Do 1 Fatality with 5 characters",
+            "Fatal Finish": "Do 1 Fatality with 5 characters",
+            "You Finish Yet???": "Do 5 Fatalities with 1 character",
             "Inner Beast": "Do 2 animalities with 1 character",
             "Shaolin Monks": "Klassic Ladder as Liu Kang With Kung Lao Kameo",
             "Door Buster": "Succeed in Baraka's Test Your Might (Chapter 5, Trapped) in Story Mode",

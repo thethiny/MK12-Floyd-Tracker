@@ -173,7 +173,7 @@ p {
     background: transparent;
     cursor: not-allowed;
     transition: background 0.3s, border 0.3s;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.7em;
 }
 
 .challenge-legend input {
