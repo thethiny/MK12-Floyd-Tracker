@@ -35,7 +35,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const newEntry = { username, platform, platform_id, floydId };
         console.log("Adding", newEntry);
 
-        if (!existingHistory.some(entry => entry.username === username && entry.platform_id === platform_id)) {
+        if (!existingHistory.some(entry =>
+            entry.username.toLowerCase() === username.toLowerCase() &&
+            entry.platform_id.toLowerCase() === platform_id.toLowerCase()
+        )) {
             existingHistory.push(newEntry);
             saveHistory(existingHistory);
             loadHistory(); // Refresh the UI
