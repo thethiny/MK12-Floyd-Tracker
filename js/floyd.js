@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const parsed = data.data.parsed;
         const raw = data.data.raw;
+        const guessedChallenges = data.data.challenges;
+        const floydPlatform = data.user.floyd_platform;
 
         // Update UI
         document.getElementById("username").textContent = data.user.username;
@@ -40,8 +42,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("wins").textContent = parsed.victories;
         document.getElementById("losses").textContent = parsed.losses;
         document.getElementById("floyd-encounters").textContent = `Times Encountered Floyd: ${raw["Total Times Encountered Floyd"]}`;
-        document.getElementById("floyd-last-state").textContent = `Floyd Last Match: ${raw["Floyd Last Battle State"]}`;
+        // document.getElementById("floyd-last-state").textContent = `Floyd Last Match: ${raw["Floyd Last Battle State"]}`;
         document.getElementById("floyd-matches-till").textContent = `${parsed["next_floyd_clue"]}`;
+
+        let floydPlatformMap = platformsMap[floydPlatform || "wb_network"] || platformsMap["wb_network"];
+        document.getElementById("platform-image").setAttribute("src", floydPlatformMap.logo);
 
         // Create challenge checkboxes and labels
         const challengeSection = document.querySelector(".challenge-section");
@@ -52,12 +57,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         const checkboxGroup = document.createElement("div");
         checkboxGroup.classList.add("checkbox-group");
 
-        // const checkboxLabels = document.createElement("div");
-        // checkboxLabels.classList.add("checkbox-labels");
 
         // const floydChallengesMax = 10;
         const floydChallengesMax = 37;
         const rowLimits = [10, 20, 29, 37];
+        let completedChallenges = 0;
         let currentRow = document.createElement("div");
         currentRow.classList.add("checkbox-row");
         for (let i = 1; i <= floydChallengesMax; i++) {
@@ -66,6 +70,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             checkbox.disabled = true;
             checkbox.checked = parsed.challenges_checklist[i] || false;
             checkbox.dataset.index = i;
+            completedChallenges += checkbox.checked;
 
             currentRow.appendChild(checkbox);
 
@@ -79,8 +84,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             checkboxGroup.appendChild(currentRow);
         }
 
+
         checkboxContainer.appendChild(checkboxGroup);
-        // checkboxContainer.appendChild(checkboxLabels);
         challengeSection.appendChild(checkboxContainer);
 
         // Add Profile Challenges
@@ -107,18 +112,29 @@ document.addEventListener("DOMContentLoaded", async function () {
             { name: "Quest Keeper", key: "daily" },
         ];
 
-        allCheckboxes = document.querySelectorAll(".checkbox-group input")
+        allCheckboxes = document.querySelectorAll(".checkbox-group input");
+        let remaining = 0;
+
+        if (!guessedChallenges || guessedChallenges.length === 0) {
+            remaining = 10 - completedChallenges;
+        } else {
+            for (const i of guessedChallenges) {
+                const checkbox = allCheckboxes[i - 1];
+                if (!checkbox.checked) {
+                    checkbox.classList.add("challenge-inactive");
+                    remaining += 1;
+                }
+            }
+        }
+
+        const counterSpan = challengeSection.querySelector('span');
+        if (counterSpan) {
+            counterSpan.textContent = `Completed: ${completedChallenges} Remaining: ${remaining}`;
+        }
+
         challenges.forEach((challenge, challengeIndex) => {
             const listItem = document.createElement("li");
             listItem.textContent = `${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
-            
-            challengeIndex += 29; // Offset of the profile challenges
-            if (parsed[challenge.key] == "Complete") {
-                const checkbox = allCheckboxes[challengeIndex];
-                if (checkbox && !checkbox.checked) {
-                    checkbox.classList.add("challenge-inactive");
-                }
-            }
 
             // Click to show description
             listItem.onclick = () => {

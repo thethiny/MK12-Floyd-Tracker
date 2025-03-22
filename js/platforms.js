@@ -63,12 +63,21 @@ let wbIncoming = {
 };
 
 const platforms = [
-    psn,
     steam,
-    epicGames,
+    psn,
     xbox,
-    nintendoSwitch,
+    epicGames,
     wbNetwork,
+    // nintendoSwitch,
     // wbFriend,
-    wbIncoming
+    // wbIncoming
 ];
+
+const platformsMap = {
+    "ps5": psn,
+    "xsx": xbox,
+    "steam": steam,
+    "wb_network": wbNetwork,
+    "epic": epicGames,
+    "nx": nintendoSwitch,
+}

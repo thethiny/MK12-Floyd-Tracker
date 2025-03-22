@@ -68,6 +68,28 @@ h1 {
     object-fit: cover;
 }
 
+.username-holder {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;   
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.platform-image-container {
+    width: 1.5em;
+    aspect-ratio: 1/1;
+}
+
+.platform-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 h2 {
     font-size: 1.5rem;
     margin-bottom: 5px;
@@ -99,7 +121,7 @@ p {
 
 /* Challenges Section */
 .challenge-section {
-    margin-top: 1em;
+    margin-top: 0.5em;
     margin-bottom: 0.5em;
     text-align: center;
     display: flex;
@@ -141,7 +163,7 @@ p {
 
 
 .challenge-legend {
-    margin-top: 1em;
+    margin-top: 0.5em;
     margin-bottom: 0.5em;
     display: flex;
     flex-direction: row;

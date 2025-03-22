@@ -53,8 +53,10 @@ input {
 .platforms {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     justify-content: center;
+    width: 75%;
+    row-gap: 1em;
+    column-gap: 0.5em;
 }
 .platform-btn {
     width: 80px;
