@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         challenges.forEach((challenge, challengeIndex) => {
             const listItem = document.createElement("li");
-            listItem.textContent = `${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
+            listItem.textContent = `${challengeIndex + 30} - ${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
 
             // Click to show description
             listItem.onclick = () => {
