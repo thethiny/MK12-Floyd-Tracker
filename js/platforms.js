@@ -1,7 +1,7 @@
 let psn = {
     name: 'PSN',
     platform_id: 'psn',
-    description: 'Playstation Network Account. If it\'s not working, get your user id from <a href="https://psn.flipscreen.games/" target="_blank">here</a>',
+    description: 'Playstation Network Account\n If it\'s not working, get your user id from <a href="https://psn.flipscreen.games/" target="_blank">here</a>',
     enabled: true,
     logo: 'https://loodibee.com/wp-content/uploads/PlayStation-Logo.png'
 };
@@ -25,7 +25,7 @@ let epicGames = {
 let xbox = {
     name: 'Xbox',
     platform_id: 'xsx',
-    description: 'Enter your Xbox GamerTag\nIf that didn\'t work et your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>',
+    description: 'Enter your Xbox GamerTag\nIf that didn\'t work get your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>',
     enabled: true,
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Xbox_one_logo.svg/800px-Xbox_one_logo.svg.png'
 };
