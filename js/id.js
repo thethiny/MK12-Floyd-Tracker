@@ -28,7 +28,7 @@ platforms.forEach(platform => {
         document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         selectedPlatform = platform;
-        platformDescription.innerHTML = platform.description.replace(".", "<br />");
+        platformDescription.innerHTML = platform.description.replace("\n", "<br />");
         selectedPlatformText.textContent = `Selected Platform: ${platform.name}`;
         errorMessage.textContent = '';
 
