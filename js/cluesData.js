@@ -187,7 +187,7 @@ const clues = [
         "name": "Keep Kalm & Finish",
         "requirements": "Press 0 buttons in round 1, win round 2 and 3.",
         "round": "Round 1",
-        "additional": "Do the same, but then win 2 requirements in a row.",
+        "additional": "Do the same as #23, but then win 2 rounds in a row.",
         "trigger": "After match",
         "video": "https://www.youtube.com/watch?v=hjbcWYeibgM",
     },
