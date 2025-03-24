@@ -57,6 +57,7 @@ const clues = [
         "name": "I Make The Rules",
         "character": "Liu Kang",
         "requirements": "Double Flawless as Liu Kang",
+        "round": "1 & 2",
         "trigger": "During fight",
         "video": "https://x.com/MaxViannaYT/status/1882312440756441295",
     },
@@ -65,6 +66,7 @@ const clues = [
         "name": "No Luna",
         "enemy": "Reptile",
         "requirements": "Double Flawless against Reptile",
+        "round": "1 & 2",
         "trigger": "During fight",
     },
     {
@@ -90,6 +92,7 @@ const clues = [
         "name": "Perfect Kouple",
         "character": "Johnny Cage & Sonya Kameo",
         "requirements": "As Johnny Cage have Sonya as your Kameo & Double Flawless",
+        "round": "1 & 2",
         "trigger": "After match",
     },
     {
