@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const parsed = data.data.parsed;
         const raw = data.data.raw;
+        const meta = data.meta;
         const guessedChallenges = data.data.challenges;
         const floydPlatform = data.user.floyd_platform;
 
@@ -44,6 +45,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("floyd-encounters").textContent = `Times Encountered Floyd: ${raw["Total Times Encountered Floyd"]}`;
         // document.getElementById("floyd-last-state").textContent = `Floyd Last Match: ${raw["Floyd Last Battle State"]}`;
         document.getElementById("floyd-matches-till").textContent = `${parsed["next_floyd_clue"]}`;
+
+        const hits = meta.hits.profile;
+        const headingContainer = document.getElementById("heading-container");
+
+        trackingH3 = document.createElement("h3");
+        trackingH3.textContent = `Tracking Number #${hits}`;
+        headingContainer.appendChild(trackingH3);
+
 
         let floydPlatformMap = platformsMap[floydPlatform || "wb_network"] || platformsMap["wb_network"];
         document.getElementById("platform-image").setAttribute("src", floydPlatformMap.logo);
@@ -67,10 +76,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         for (let i = 1; i <= floydChallengesMax; i++) {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
-            checkbox.disabled = true;
+            // checkbox.disabled = true;
             checkbox.checked = parsed.challenges_checklist[i] || false;
             checkbox.dataset.index = i;
             completedChallenges += checkbox.checked;
+
+            checkbox.onclick = async (e) => {
+                e.preventDefault();
+                let clue = clues[i-1]
+                alert(`${i}: ${clue.name}\n${clue.requirements}${clue.additional? '\n' + clue.additional: ''}`);
+            }
 
             currentRow.appendChild(checkbox);
 

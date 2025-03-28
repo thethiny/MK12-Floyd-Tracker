@@ -13,17 +13,20 @@
     <meta property="og:url" content="https://floydtracker.thethiny.xyz/data"> <!-- Update if needed -->
 
     <link rel="stylesheet" href="css/style.css?22-03-25_01">
-    <link rel="stylesheet" href="css/floyd.css?22-03-25_02">
+    <link rel="stylesheet" href="css/floyd.css?29-03-25_01">
     <link rel="stylesheet" href="css/navbar.css?02-03-25_01">
     <script src="js/platforms.js?23-03-25_01"></script>
-    <script defer src="js/floyd.js?23-03-25_02"></script>
+    <script src="js/cluesData.js?23-03-25_01"></script>
+    <script defer src="js/floyd.js?29-03-25_01"></script>
     <script defer src="js/navbar.js?02-03-25_01"></script>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Floyd Tracker</h1>
+        <div id="heading-container">
+            <h1>Floyd Tracker</h1>
+        </div>
 
         <!-- Main Floyd Card -->
         <div id="floyd-data-card" class="floyd-data-card hidden">
@@ -66,6 +69,9 @@
                 Incomplete = You need to do this challenge<br/>
                 Complete = Challenge complete
             </p> -->
+            <a class="win-loss" href="/clues">
+                Clues Requirements
+            </a>
         </div>
 
         <div id="kofi-section" class="kofi-section hidden">

@@ -28,6 +28,14 @@ h1 {
     margin-bottom: 1.5em;
 }
 
+#heading-container {
+    margin-bottom: 3em;
+}
+
+#heading-container h1 {
+    margin-bottom: 0.5em;
+}
+
 .floyd-data-card {
     display: flex;
     flex-direction: column;
@@ -119,6 +127,12 @@ p {
     letter-spacing: 1px;
 }
 
+a.win-loss {
+    text-decoration: none;
+    color: inherit;
+    text-transform: none;
+}
+
 /* Challenges Section */
 .challenge-section {
     margin-top: 0.5em;
@@ -193,7 +207,7 @@ p {
     border: 2px solid #e08baf;
     border-radius: 10px;
     background: transparent;
-    cursor: not-allowed;
+    cursor: pointer;
     transition: background 0.3s, border 0.3s;
     margin-bottom: 0.7em;
 }
