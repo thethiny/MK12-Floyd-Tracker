@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
 
-        const counterSpan = challengeSection.querySelector('span');
+        const counterSpan = challengeSectionAll.querySelector('span');
         if (counterSpan) {
             counterSpan.textContent = `Completed: ${completedChallenges} Remaining: ${remaining}`;
         }
