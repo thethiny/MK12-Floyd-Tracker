@@ -59,12 +59,103 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Create challenge checkboxes and labels
         const challengeSection = document.querySelector(".challenge-section");
+        const challengeSectionAll = document.querySelector(".challenge-section-all");
+
+        let use37Bit = false;
+
+        if (
+            guessedChallenges &&
+            guessedChallenges.length > 0 &&
+            guessedChallenges.some(i => parsed.challenges_checklist[i])
+        ) {
+            const mask = BigInt(parsed.challenges_mask);
+            const guessedSet = new Set(guessedChallenges);
+
+            if (mask <= 1023n) {
+                // 10-bit check
+                const maskIndices = [];
+                for (let i = 0; i < 10; i++) {
+                    if ((mask & (1n << BigInt(i))) !== 0n) {
+                        maskIndices.push(i + 1);
+                    }
+                }
+
+                // If all set bits ARE in guessedChallenges → use 37-bit
+                use37Bit = maskIndices.every(idx => guessedSet.has(idx));
+            } else {
+                use37Bit = true;
+            }
+
+            const guessedContainer = document.createElement("div");
+            guessedContainer.classList.add("checkbox-container");
+
+            const guessedGroup = document.createElement("div");
+            guessedGroup.classList.add("checkbox-group", "guessed-row");
+
+            const guessedRow = document.createElement("div");
+            guessedRow.classList.add("checkbox-row");
+
+            const checkboxList = guessedChallenges.map((index, i) => {
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.disabled = true;
+
+                if (use37Bit) {
+                    checkbox.checked = ((mask >> BigInt(index - 1)) & 1n) === 1n;
+                } else {
+                    checkbox.checked = (mask & (1n << BigInt(i))) !== 0n;
+                }
+
+                checkbox.dataset.index = index;
+                checkbox.classList.add("challenge-checkbox"); // optional: styling
+
+                return { index, checkbox };
+            });
+
+            // Sort by challenge index
+            checkboxList.sort((a, b) => a.index - b.index);
+
+            // Append sorted checkboxes
+            checkboxList.forEach(({ checkbox }) => {
+                guessedRow.appendChild(checkbox);
+            });
+
+            guessedGroup.appendChild(guessedRow);
+            guessedContainer.appendChild(guessedGroup);
+
+            const toggleLabel = document.querySelector(".compact-button-toggler");
+            const toggleCheckbox = toggleLabel.querySelector("input");
+            const toggleText = document.createElement("span");
+            toggleLabel.appendChild(toggleText);
+            toggleText.innerHTML = 'Show <u>All</u> Challenges';
+
+
+            // Create short version wrapper
+            const shortVersionWrapper = document.getElementById("short-version-container");
+
+            // Append guessedContainer to short wrapper
+            shortVersionWrapper.appendChild(guessedContainer);
+
+            // Toggle behavior
+            toggleCheckbox.addEventListener("change", () => {
+                const checked = toggleCheckbox.checked;
+                shortVersionWrapper.style.display = checked ? "flex" : "none";
+                challengeSectionAll.style.display = checked ? "none" : "flex";
+                toggleText.innerHTML = checked ? 'Show <u>10</u> Challenges' : 'Show <u>All</u> Challenges';
+            });
+
+        }
+
+        if (!use37Bit) {
+            document.querySelector(".compact-button-toggler input").click();
+        }
 
         const checkboxContainer = document.createElement("div");
         checkboxContainer.classList.add("checkbox-container");
 
         const checkboxGroup = document.createElement("div");
         checkboxGroup.classList.add("checkbox-group");
+        
 
 
         // const floydChallengesMax = 10;
@@ -101,7 +192,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
         checkboxContainer.appendChild(checkboxGroup);
-        challengeSection.appendChild(checkboxContainer);
+        challengeSectionAll.appendChild(checkboxContainer);
+
 
         // Add Profile Challenges
         const challengesList = document.getElementById("challenges-list");
@@ -127,7 +219,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             { name: "Quest Keeper", key: "daily" },
         ];
 
-        allCheckboxes = document.querySelectorAll(".checkbox-group input");
+        allCheckboxes = document.querySelectorAll(".challenge-section-all .checkbox-group input");
         let remaining = 0;
 
         if (!guessedChallenges || guessedChallenges.length === 0) {

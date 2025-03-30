@@ -14,11 +14,11 @@
     <link rel="icon" href="assets/PinkFloyd-Square.png" type="image/png">
 
     <link rel="stylesheet" href="css/style.css?22-03-25_01">
-    <link rel="stylesheet" href="css/floyd.css?29-03-25_01">
+    <link rel="stylesheet" href="css/floyd.css?30-03-25_01">
     <link rel="stylesheet" href="css/navbar.css?02-03-25_01">
     <script src="js/platforms.js?23-03-25_01"></script>
     <script src="js/cluesData.js?23-03-25_01"></script>
-    <script defer src="js/floyd.js?29-03-25_01"></script>
+    <script defer src="js/floyd.js?30-03-25_01"></script>
     <script defer src="js/navbar.js?02-03-25_01"></script>
 </head>
 
@@ -50,18 +50,24 @@
             <!-- <p id="floyd-last-state" class="floyd-last-state">Floyd Last Match: Loading...</p> -->
             <p id="floyd-encounters" class="floyd-encounters">Times Encountered Floyd: Loading...</p>
             <div class="challenge-section">
-                <div class="challenge-legend">
-                    <div class="challenge-legend-item">
-                        <input type="checkbox" disabled="" data-index="1"> No Info
+                <label class="compact-button-toggler">
+                    <input type="checkbox"/>
+                </label>
+                <div id="short-version-container"></div>
+                <div class="challenge-section-all">
+                    <div class="challenge-legend">
+                        <div class="challenge-legend-item">
+                            <input type="checkbox" disabled="" data-index="1"> No Info
+                        </div>
+                        <div class="challenge-legend-item">
+                            <input type="checkbox" class="challenge-inactive" disabled="" data-index="2"> Incomplete
+                        </div>
+                        <div class="challenge-legend-item">
+                            <input type="checkbox" disabled="" data-index="3" checked> Complete
+                        </div>
                     </div>
-                    <div class="challenge-legend-item">
-                        <input type="checkbox" class="challenge-inactive" disabled="" data-index="2"> Incomplete
-                    </div>
-                    <div class="challenge-legend-item">
-                        <input type="checkbox" disabled="" data-index="3" checked> Complete
-                    </div>
+                    <span>Challenges Completed: </span>
                 </div>
-                <span>Challenges Completed: </span>
             </div>
             
             <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
