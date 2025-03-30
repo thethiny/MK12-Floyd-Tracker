@@ -73,13 +73,60 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        history.forEach(entry => {
+        history.forEach((entry, index) => {
             const listItem = document.createElement("li");
-            listItem.textContent = `${entry.username} - ${entry.platform}`;
+            listItem.classList.add("history-item");
+
+            // Container for row layout
+            const row = document.createElement("div");
+            row.classList.add("history-row");
+
+            // Icon
+            const iconDiv = document.createElement("div");
+            iconDiv.classList.add("history-icon");
+            const platformInfo = platformsMap[entry.platform_id];
+            if (platformInfo) {
+                const iconImg = document.createElement("img");
+                iconImg.src = platformInfo.logo;
+                iconImg.alt = platformInfo.name;
+                iconImg.classList.add("history-icon-img");
+                iconDiv.appendChild(iconImg);
+            }
+
+            // Username
+            const textDiv = document.createElement("div");
+            textDiv.classList.add("history-username");
+            textDiv.textContent = entry.username;
+
+            // Remove button
+            const removeWrapper = document.createElement("div");
+            removeWrapper.classList.add("remove-wrapper");
+            removeWrapper.onclick = (e) => {
+                e.stopPropagation();
+                const newHistory = getHistory();
+                newHistory.splice(index, 1);
+                saveHistory(newHistory);
+                loadHistory();
+            };
+
+            const removeBtn = document.createElement("span");
+            removeBtn.textContent = "✕";
+            removeBtn.classList.add("remove-entry");
+            removeWrapper.appendChild(removeBtn);
+
+            // Assemble row
+            row.appendChild(iconDiv);
+            row.appendChild(textDiv);
+            row.appendChild(removeWrapper);
+
+            // Set data attributes & final list item
             listItem.setAttribute("data-id", entry.floydId);
             listItem.setAttribute("data-platform", entry.platform_id);
+            listItem.appendChild(row);
             historyList.appendChild(listItem);
         });
+
+
     }
 
     loadHistory();

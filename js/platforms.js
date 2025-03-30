@@ -75,6 +75,7 @@ const platforms = [
 
 const platformsMap = {
     "ps5": psn,
+    "psn": psn,
     "xsx": xbox,
     "steam": steam,
     "wb_network": wbNetwork,
