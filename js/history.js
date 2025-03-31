@@ -15,13 +15,18 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleInside.addEventListener("click", toggleSidebar);
 
     historyList.addEventListener("click", function (event) {
-        if (event.target.tagName === "LI") {
-            const floydId = event.target.getAttribute("data-id");
-            const platformId = event.target.getAttribute("data-platform");
-            const [username, platformName] = event.target.textContent.split(" - ");
+        const listItem = event.target.closest("li.history-item");
+        if (!listItem) return;
+
+        const floydId = listItem.getAttribute("data-id");
+        const platformId = listItem.getAttribute("data-platform");
+        const username = listItem.querySelector(".history-username")?.textContent?.trim();
+
+        if (username && platformId && floydId) {
             redirectToFloyd(username, platformId, floydId);
         }
     });
+
 
     clearHistoryBtn.addEventListener("click", function () {
         if (confirm("Are you sure you want to clear all history?")) {
