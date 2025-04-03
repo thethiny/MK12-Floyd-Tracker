@@ -64,9 +64,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         let use37Bit = false;
 
         if (
-            guessedChallenges &&
-            guessedChallenges.length > 0 &&
-            guessedChallenges.some(i => parsed.challenges_checklist[i])
+            guessedChallenges
+            && guessedChallenges.length > 0
+            && guessedChallenges.some(i => parsed.challenges_checklist[i])
         ) {
             const mask = BigInt(parsed.challenges_mask);
             const guessedSet = new Set(guessedChallenges);
@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             guessedGroup.appendChild(guessedRow);
             guessedContainer.appendChild(guessedGroup);
 
+            
             const toggleLabel = document.querySelector(".compact-button-toggler");
             const toggleCheckbox = toggleLabel.querySelector("input");
             const toggleText = document.createElement("span");
@@ -143,12 +144,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 challengeSectionAll.style.display = checked ? "none" : "flex";
                 toggleText.innerHTML = checked ? 'Show <u>10</u> Challenges' : 'Show <u>All</u> Challenges';
             });
-
+            if (!use37Bit) {
+                document.querySelector(".compact-button-toggler input").click();
+            }
+        } else {
+            document.querySelector(".compact-button-toggler").remove();
         }
 
-        if (!use37Bit) {
-            document.querySelector(".compact-button-toggler input").click();
-        }
 
         const checkboxContainer = document.createElement("div");
         checkboxContainer.classList.add("checkbox-container");
