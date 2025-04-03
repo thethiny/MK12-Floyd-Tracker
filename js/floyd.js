@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         trackingH3.textContent = `Tracking Number #${hits}`;
         headingContainer.appendChild(trackingH3);
 
+        if (hits >= 1_000_000 && hits <= 1_001_000) {
+            trackingH3.innerHTML = `Tracking Number <span class="gold">#${hits}!</span> 🥳🎈` 
+        }
+
 
         let floydPlatformMap = platformsMap[floydPlatform || "wb_network"] || platformsMap["wb_network"];
         document.getElementById("platform-image").setAttribute("src", floydPlatformMap.logo);
