@@ -25,16 +25,24 @@ platforms.forEach(platform => {
     btn.innerHTML = `<img src="${platform.logo}" alt="${platform.name}">`;
 
     btn.onclick = () => {
-        document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedPlatform = platform;
-        platformDescription.innerHTML = platform.description.replace("\n", "<br />");
-        selectedPlatformText.textContent = `Selected Platform: ${platform.name}`;
-        errorMessage.textContent = '';
-
-        // Disable track button if the selected platform is disabled
-        trackButton.disabled = platform.enabled ? false : true;
+        if (btn.classList.contains('selected')) {
+            btn.classList.remove('selected');
+            selectedPlatform = null;
+            platformDescription.innerHTML = 'Select a platform to see details';
+            selectedPlatformText.textContent = 'No platform selected';
+            errorMessage.textContent = '';
+            trackButton.disabled = true;
+        } else {
+            document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedPlatform = platform;
+            platformDescription.innerHTML = platform.description.replace("\n", "<br />");
+            selectedPlatformText.textContent = `Selected Platform: ${platform.name}`;
+            errorMessage.textContent = '';
+            trackButton.disabled = platform.enabled ? false : true;
+        }
     };
+
 
     platformContainer.appendChild(btn);
 });
