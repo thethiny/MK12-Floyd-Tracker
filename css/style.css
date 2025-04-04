@@ -44,11 +44,16 @@ input {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
+    /* border: solid 2px #white; */
     border: none;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     font-size: 1rem;
     background: #e08baf;
     color: white;
+}
+input::placeholder {
+    color: #c46788;
 }
 .platforms {
     display: flex;
