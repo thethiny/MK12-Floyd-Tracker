@@ -80,6 +80,9 @@ input::placeholder {
     transform: scale(1);
     transition: transform 0.1s ease-in-out;
 }
+.platform-btn:hover {
+    transform: scale(1.1);
+}
 .platform-btn img {
     width: 4em;
     aspect-ratio: 1/1;
