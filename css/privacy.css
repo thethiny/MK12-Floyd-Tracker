@@ -1,0 +1,88 @@
+.privacy-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.privacy-section {
+    margin-bottom: 3rem;
+    text-align: left;
+    padding: 0 0;
+}
+
+.privacy-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem; /* More space below section title */
+}
+
+.privacy-section p {
+    font-size: 1.1rem;
+    margin: 0.8rem 0; /* More space between paragraphs */
+    line-height: 1.6; /* Easier to read */
+}
+
+.repo-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem; /* Add bottom space after repos */
+    padding: 0 1rem;
+}
+
+.repo-card {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2rem 1rem;
+    border-radius: 12px;
+    text-align: center;
+    flex: 1 1 40%;
+    max-width: 400px;
+    transition: transform 0.3s, background 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.repo-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.repo-icon {
+    width: 4em;
+    aspect-ratio: 1/1;
+    margin-bottom: 1rem;
+}
+
+.repo-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.repo-card a {
+    margin-top: auto;
+    color: #4ea3f1;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.repo-card a:hover {
+    text-decoration: underline;
+}
+
+.questions {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.questions a {
+    color: white;
+    text-decoration: underline;
+    font-weight: bold;
+}
