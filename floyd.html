@@ -13,12 +13,13 @@
     <meta property="og:url" content="https://floydtracker.thethiny.xyz/floyd">
     <link rel="icon" href="assets/PinkFloyd-Square.png" type="image/png">
 
-    <link rel="stylesheet" href="css/style.css?22-03-25_01">
+    <link rel="stylesheet" href="css/style.css?06-04-25_01">
     <link rel="stylesheet" href="css/floyd.css?03-04-25_01">
     <link rel="stylesheet" href="css/navbar.css?02-03-25_01">
-    <script src="js/platforms.js?23-03-25_01"></script>
+    <script src="js/platforms.js?06-04-25_01"></script>
     <script src="js/cluesData.js?23-03-25_01"></script>
-    <script defer src="js/floyd.js?03-04-25_02"></script>
+    <script src="js/config.js?06-04-25_01"></script>
+    <script defer src="js/floyd.js?06-04-25_01"></script>
     <script defer src="js/navbar.js?02-03-25_01"></script>
 </head>
 
@@ -50,9 +51,14 @@
             <!-- <p id="floyd-last-state" class="floyd-last-state">Floyd Last Match: Loading...</p> -->
             <p id="floyd-encounters" class="floyd-encounters">Times Encountered Floyd: Loading...</p>
             <div class="challenge-section">
-                <label class="compact-button-toggler">
-                    <input type="checkbox"/>
-                </label>
+                <div class="challenge-toggles">
+                    <label class="compact-button-toggler display-mode">
+                        <input type="checkbox"/>
+                    </label>
+                    <label class="compact-button-toggler offline-mode">
+                        <input type="checkbox"/>
+                    </label>
+                </div>
                 <div id="short-version-container"></div>
                 <div class="challenge-section-all">
                     <div class="challenge-legend">

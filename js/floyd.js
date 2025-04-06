@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     try {
-        const response = await fetch(`https://thethiny.xyz/mk12/floyd/data?username=${username}&platform=${platform}&user_id=${userId}`);
+        const response = await fetch(`${config.apiBaseUrl}/data?username=${username}&platform=${platform}&user_id=${userId}`);
         const data = await response.json();
 
         if (!response.ok || !data.data) {
@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const parsed = data.data.parsed;
         const raw = data.data.raw;
         const meta = data.meta;
-        const guessedChallenges = data.data.challenges;
+        const guessedChallenges = data.data.challenges.online !== undefined ? data.data.challenges.online : data.data.challenges;
+        const guessedOfflineChallenges = data.data.challenges.offline || [];
         const floydPlatform = data.user.floyd_platform;
 
         // Update UI
@@ -52,6 +53,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         trackingH3 = document.createElement("h3");
         trackingH3.textContent = `Tracking Number #${hits}`;
         headingContainer.appendChild(trackingH3);
+
+
+        // Offline Mode Stuff
+        let useOfflineMode = false;
+
+        function getActiveGuessedChallenges() {
+            return useOfflineMode ? guessedOfflineChallenges : guessedChallenges;
+        }
 
 
         let floydPlatformMap = platformsMap[floydPlatform || "wb_network"] || platformsMap["wb_network"];
@@ -124,11 +133,23 @@ document.addEventListener("DOMContentLoaded", async function () {
             guessedContainer.appendChild(guessedGroup);
 
             
-            const toggleLabel = document.querySelector(".compact-button-toggler");
+            const toggleLabel = document.querySelector(".compact-button-toggler.display-mode");
             const toggleCheckbox = toggleLabel.querySelector("input");
             const toggleText = document.createElement("span");
             toggleLabel.appendChild(toggleText);
-            toggleText.innerHTML = 'Show <u>All</u> Challenges';
+            toggleText.innerHTML = 'Show <u>10</u> Challenges';
+
+            const toggleOfflineLabel = document.querySelector(".compact-button-toggler.offline-mode");
+            if (false && guessedOfflineChallenges && guessedOfflineChallenges.length > 0) // Disabled until working
+            {
+                const toggleOfflineCheckbox = toggleOfflineLabel.querySelector("input");
+                const toggleOfflineText = document.createElement("span");
+                toggleOfflineLabel.appendChild(toggleOfflineText);
+                toggleOfflineText.innerHTML = 'Offline Challenges';    
+            } else {
+                toggleOfflineLabel.remove();
+            }
+            
 
 
             // Create short version wrapper
@@ -142,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const checked = toggleCheckbox.checked;
                 shortVersionWrapper.style.display = checked ? "flex" : "none";
                 challengeSectionAll.style.display = checked ? "none" : "flex";
-                toggleText.innerHTML = checked ? 'Show <u>10</u> Challenges' : 'Show <u>All</u> Challenges';
+                toggleText.innerHTML = checked ? 'Show <u>All</u> Challenges' : 'Show <u>10</u> Challenges';
             });
             if (!use37Bit) {
                 document.querySelector(".compact-button-toggler input").click();

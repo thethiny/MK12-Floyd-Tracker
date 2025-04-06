@@ -17,7 +17,7 @@ let steam = {
 let epicGames = {
     name: 'Epic Games',
     platform_id: 'epic',
-    description: 'Epic Games ID from <a href="https://epic-lookup.com/" target="_blank">Epic Lookup</a>',
+    description: 'Either Login with your Epic ID above or\nGet your Epic Games ID from <a href="https://epic-lookup.com/" target="_blank">Epic Lookup</a>',
     enabled: true,
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/882px-Epic_Games_logo.svg.png'
 };

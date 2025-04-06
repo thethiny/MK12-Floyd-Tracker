@@ -4,6 +4,7 @@ const selectedPlatformText = document.getElementById('selected-platform');
 const errorMessage = document.getElementById('error-message');
 const loadingOverlay = document.getElementById('loading');
 const trackButton = document.getElementById('track');
+const externalAuthButton = document.getElementById('login');
 let selectedPlatform = null;
 
 // Check if a username+platform combo exists in history
@@ -25,6 +26,8 @@ platforms.forEach(platform => {
     btn.innerHTML = `<img src="${platform.logo}" alt="${platform.name}">`;
 
     btn.onclick = () => {
+        externalAuthButton.style.display = "none";
+        externalAuthButton.removeAttribute('data-id');
         if (btn.classList.contains('selected')) {
             btn.classList.remove('selected');
             selectedPlatform = null;
@@ -40,12 +43,30 @@ platforms.forEach(platform => {
             selectedPlatformText.textContent = `Selected Platform: ${platform.name}`;
             errorMessage.textContent = '';
             trackButton.disabled = platform.enabled ? false : true;
+            if (platform.platform_id === "epic") {
+                externalAuthButton.style.display = "inline-block";
+                externalAuthButton.dataset.id = "auth_eos";
+            }
         }
     };
 
 
     platformContainer.appendChild(btn);
 });
+
+// Track auth button
+externalAuthButton.onclick = () => {
+    const platformId = externalAuthButton.dataset.id;
+    if (!platformId) return; // Safety check
+
+    const currentOrigin = window.location.origin;
+    const redirectUri = encodeURIComponent(`${currentOrigin}/auth_redirect`);
+    const clientId = "xyza7891Jjdyme00ogto6B3lg0guwyZV";
+    const authUrl = `https://www.epicgames.com/id/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=basic_profile&state=${platformId}`;
+    window.location.href = authUrl;
+};
+
+
 
 // Track button click event
 document.getElementById('track').onclick = async () => {
@@ -63,7 +84,7 @@ document.getElementById('track').onclick = async () => {
     loadingOverlay.style.display = 'flex';
 
     try {
-        const response = await fetch(`https://thethiny.xyz/mk12/floyd/id?username=${username}&platform=${selectedPlatform.platform_id}`);
+        const response = await fetch(`${config.apiBaseUrl}/id?username=${username}&platform=${selectedPlatform.platform_id}`);
 
         if (response.status === 503) {
             errorMessage.textContent = 'Service is under maintenance. Please try again soon!';

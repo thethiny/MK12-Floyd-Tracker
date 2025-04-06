@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", function () {
         historySidebar.classList.toggle("open");
     }
 
-    toggleOutside.addEventListener("click", toggleSidebar);
-    toggleInside.addEventListener("click", toggleSidebar);
+    toggleOutside?.addEventListener("click", toggleSidebar);
+    toggleInside?.addEventListener("click", toggleSidebar);
 
-    historyList.addEventListener("click", function (event) {
+    historyList?.addEventListener("click", function (event) {
         const listItem = event.target.closest("li.history-item");
         if (!listItem) return;
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    clearHistoryBtn.addEventListener("click", function () {
+    clearHistoryBtn?.addEventListener("click", function () {
         if (confirm("Are you sure you want to clear all history?")) {
             localStorage.removeItem("floydHistory");
             loadHistory(); // Refresh history list
@@ -46,7 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
         )) {
             existingHistory.push(newEntry);
             saveHistory(existingHistory);
-            loadHistory(); // Refresh the UI
+            if (historySidebar) {
+                loadHistory(); // Refresh the UI
+            }
         }
     }
 
@@ -134,7 +136,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    loadHistory();
+    if (historySidebar)
+    {
+        loadHistory();
+    }
 
     // Expose history functions to global scope so other scripts can use it
     window.addHistory = addHistory;
