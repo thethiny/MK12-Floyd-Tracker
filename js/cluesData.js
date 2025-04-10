@@ -198,7 +198,7 @@ const clues = [
         "id": 25,
         "name": "Demonic Duo",
         "character": "Ashrah & Sareena Kameo",
-        "requirements": "Use Sareena Kameo's Jataaka Blessing on yourself after using up 3 meter bars",
+        "requirements": "As Ashrah, use Sareena Kameo's Jataaka Blessing on yourself after using up 3 meter bars",
         "additional": "Let enemy hit you until you have 3 bars. Use your Ex moves until your bar is 0% and MISS (so you don't gain meter by accident). Use Down + Kameo (R1) so you regain a meter.",
         "trigger": "During fight",
         "video": "https://x.com/alex8asant19/status/1884074150362505418",
