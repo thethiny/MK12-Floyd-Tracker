@@ -3,7 +3,7 @@ let psn = {
     platform_id: 'psn',
     description: 'Playstation Network Account\n If it\'s not working, get your user id from <a href="https://psn.flipscreen.games/" target="_blank">here</a>',
     enabled: true,
-    logo: 'https://loodibee.com/wp-content/uploads/PlayStation-Logo.png'
+    logo: '/assets/icons/psn-logo.png'
 };
 
 let steam = {
@@ -11,7 +11,7 @@ let steam = {
     platform_id: 'steam',
     description: 'Steam Username, Steam ID, or Steam Community URL\n Find your Steam64 ID <a href="https://www.steamidfinder.com/" target="_blank">here</a>',
     enabled: true,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png'
+    logo: '/assets/icons/steam-logo.webp'
 };
 
 let epicGames = {
@@ -19,7 +19,7 @@ let epicGames = {
     platform_id: 'epic',
     description: 'Either Login with your Epic ID above or\nGet your Epic Games ID from <a href="https://epic-lookup.com/" target="_blank">Epic Lookup</a>',
     enabled: true,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/882px-Epic_Games_logo.svg.png'
+    logo: '/assets/icons/epic-logo.png'
 };
 
 let xbox = {
@@ -27,7 +27,7 @@ let xbox = {
     platform_id: 'xsx',
     description: 'Enter your Xbox GamerTag\nIf that didn\'t work get your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>',
     enabled: true,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Xbox_one_logo.svg/800px-Xbox_one_logo.svg.png'
+    logo: '/assets/icons/xbox-logo.png'
 };
 
 let nintendoSwitch = {
@@ -43,7 +43,7 @@ let wbNetwork = {
     platform_id: 'wb_network',
     description: 'Search by WBID or WB email',
     enabled: true,
-    logo: 'https://cdn.cookielaw.org/logos/1b21e05d-c206-4e0b-970e-2d73a23e42e8/f00cc75c-15c8-451e-831b-8ee683b4b250/5fedc951-d984-480e-a455-d2e40dd3af75/WB_Logo.png'
+    logo: '/assets/icons/wb-logo.png'
 };
 
 let wbFriend = {
@@ -51,7 +51,7 @@ let wbFriend = {
     platform_id: 'wb_friend',
     description: 'If you are friends with `thethinyapi` on <a href="https://account.wbgames.com/friends" target="_blank">WB Network</a>',
     enabled: true,
-    logo: 'https://cdn.cookielaw.org/logos/1b21e05d-c206-4e0b-970e-2d73a23e42e8/f00cc75c-15c8-451e-831b-8ee683b4b250/5fedc951-d984-480e-a455-d2e40dd3af75/WB_Logo.png'
+    logo: '/assets/icons/wb-logo.png'
 };
 
 let wbIncoming = {
@@ -59,7 +59,7 @@ let wbIncoming = {
     platform_id: 'wb_incoming',
     description: 'Add `thethinyapi` on <a href="https://account.wbgames.com/friends" target="_blank">WB Friends</a> and that\'s it\n If it\'s not working then cancel the request and add again\n You don\'t need to wait for me to accept it',
     enabled: true,
-    logo: 'https://cdn.cookielaw.org/logos/1b21e05d-c206-4e0b-970e-2d73a23e42e8/f00cc75c-15c8-451e-831b-8ee683b4b250/5fedc951-d984-480e-a455-d2e40dd3af75/WB_Logo.png'
+    logo: '/assets/icons/wb-logo.png'
 };
 
 const platforms = [

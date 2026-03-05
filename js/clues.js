@@ -43,7 +43,7 @@ function createTwitchEmbed(url) {
     iframe.innerHTML = `
     <div style="position: relative; width: 100%; padding-top: 56.25%; overflow: hidden;">
         <iframe
-        src="https://player.twitch.tv/?${type}=${videoId}&parent=localhost&parent=floydtracker.thethiny.xyz&autoplay=false${timeParam ? '&time=' + timeParam : ''}"
+        src="https://player.twitch.tv/?${type}=${videoId}&parent=localhost&parent=floydtracker.thethiny.xyz&parent=floyd.kamidogu.com&autoplay=false${timeParam ? '&time=' + timeParam : ''}"
         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
         allowfullscreen>
         </iframe>
