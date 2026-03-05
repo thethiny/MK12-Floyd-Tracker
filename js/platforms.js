@@ -25,7 +25,7 @@ let epicGames = {
 let xbox = {
     name: 'Xbox',
     platform_id: 'xsx',
-    description: 'Enter your Xbox GamerTag\nIf that didn\'t work get your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>',
+    description: 'Enter your Xbox GamerTag without the <b>#</b>\nIf that didn\'t work get your Xbox XUID from <a href="https://www.cxkes.me/xbox/xuid" target="_blank">Xbox XUID Lookup</a>',
     enabled: true,
     logo: '/assets/icons/xbox-logo.png'
 };
