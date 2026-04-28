@@ -6,6 +6,14 @@ let psn = {
     logo: '/assets/icons/psn-logo.png'
 };
 
+let psnWeb = {
+    name: 'PSN Web',
+    platform_id: 'psn_web',
+    description: 'If the normal PSN is not working, then sign in to <a href="https://store.playstation.com" target="_blank">PlayStation Store</a>, then click the login button. You will get some text, copy the text into the username field and press track!',
+    enabled: true,
+    logo: '/assets/icons/psn-logo.png'
+};
+
 let steam = {
     name: 'Steam',
     platform_id: 'steam',
@@ -68,6 +76,7 @@ const platforms = [
     xbox,
     epicGames,
     wbNetwork,
+    psnWeb,
     // nintendoSwitch,
     // wbFriend,
     // wbIncoming
@@ -76,6 +85,7 @@ const platforms = [
 const platformsMap = {
     "ps5": psn,
     "psn": psn,
+    "psn_web": psnWeb,
     "xsx": xbox,
     "steam": steam,
     "wb_network": wbNetwork,

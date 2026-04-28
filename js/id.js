@@ -46,10 +46,12 @@ platforms.forEach(platform => {
             if (platform.platform_id === "epic") {
                 externalAuthButton.style.display = "inline-block";
                 externalAuthButton.dataset.id = "auth_eos";
+            } else if (platform.platform_id === "psn_web") {
+                externalAuthButton.style.display = "inline-block";
+                externalAuthButton.dataset.id = "auth_psn";
             }
         }
     };
-
 
     platformContainer.appendChild(btn);
 });
@@ -59,17 +61,23 @@ externalAuthButton.onclick = () => {
     const platformId = externalAuthButton.dataset.id;
     if (!platformId) return; // Safety check
 
-    const currentOrigin = window.location.origin;
-    const redirectUri = encodeURIComponent(`${currentOrigin}/auth_redirect`);
-    const clientId = "xyza7891Jjdyme00ogto6B3lg0guwyZV";
-    const authUrl = `https://www.epicgames.com/id/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=basic_profile&state=${platformId}`;
-    window.location.href = authUrl;
+    if (platformId === "auth_psn") {
+        window.open("https://ca.account.sony.com/api/v1/ssocookie", "_blank");
+    } else if (platformId === "auth_eos") {
+        // Epic Games specific logic
+        const currentOrigin = window.location.origin;
+        const redirectUri = encodeURIComponent(`${currentOrigin}/auth_redirect`);
+        const clientId = "xyza7891Jjdyme00ogto6B3lg0guwyZV";
+        const authUrl = `https://www.epicgames.com/id/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=basic_profile&state=${platformId}`;
+        window.location.href = authUrl;
+    }
+
 };
 
 
 
 // Track button click event
-document.getElementById('track').onclick = async () => {
+trackButton.onclick = async () => {
     const username = document.getElementById('username').value.trim();
     if (!username || !selectedPlatform) return alert('Enter a username and select a platform');
 
@@ -94,8 +102,13 @@ document.getElementById('track').onclick = async () => {
         const data = await response.json();
 
         if (response.ok) {
-            addHistory(username, selectedPlatform.name, selectedPlatform.platform_id, data.user_id); // Store in history
-            redirectToFloyd(username, selectedPlatform.platform_id, data.user_id);
+            if (externalAuthButton.dataset.id === "auth_psn") {
+                addHistory(data.username, platformsMap.psn.name, platformsMap.psn.platform_id, data.user_id); // Store in history
+                redirectToFloyd(data.username, platformsMap.psn.platform_id, data.user_id);
+            } else {
+                addHistory(username, selectedPlatform.name, selectedPlatform.platform_id, data.user_id); // Store in history
+                redirectToFloyd(username, selectedPlatform.platform_id, data.user_id);
+            }
         } else {
             errorMessage.textContent = `Error: ${data.error}`;
         }
