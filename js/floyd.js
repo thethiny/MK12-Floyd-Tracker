@@ -8,6 +8,57 @@ function createChallengeChip(checkbox) {
     return chip;
 }
 
+const htmlToImageUrl = "https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js";
+
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+// Copies the top card as a png, falls back to a download where image clipboard isn't supported
+async function copyCardImage(card, button, fileName) {
+    const options = {
+        pixelRatio: 2,
+        backgroundColor: getComputedStyle(card).backgroundColor, // Applies to the card itself, not around it
+        style: { margin: "0", paddingTop: "56px" }, // Room for the avatar that overlaps the card
+        filter: (node) => !(node.classList && (node.classList.contains("card-actions") || node.classList.contains("tracking-badge"))), // Buttons and the lookup counter aren't player info
+    };
+    const label = button.textContent;
+    const flash = (text) => {
+        button.textContent = text;
+        setTimeout(() => button.textContent = label, 1800);
+    };
+
+    if (!window.htmlToImage) {
+        flash("Loading...");
+        return;
+    }
+
+    // Safari needs clipboard.write called right away with a promise, not after an await
+    const blobPromise = htmlToImage.toBlob(card, options);
+    if (navigator.clipboard && window.ClipboardItem) {
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })]);
+            flash("Copied!");
+            return;
+        } catch (e) {
+            console.log("Clipboard image not allowed, downloading instead", e);
+        }
+    }
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(await blobPromise);
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    flash("Saved!");
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get("username");
@@ -18,6 +69,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const profileChallengesCard = document.getElementById("profile-challenges");
     const hintsSection = document.getElementById("hints-section");
     const fatalitiesSection = document.getElementById("fatalities-section");
+    const animalitiesSection = document.getElementById("animalities-section");
+    const allChallengesSection = document.getElementById("all-challenges-section");
     const tacoSection = document.getElementById("taco-section");
     const loadingMessage = document.getElementById("loading-message");
     const errorMessage = document.getElementById("error-message");
@@ -45,154 +98,70 @@ document.addEventListener("DOMContentLoaded", async function () {
         const raw = data.data.raw;
         const meta = data.meta;
         const guessedChallenges = data.data.challenges.online !== undefined ? data.data.challenges.online : data.data.challenges;
-        const guessedOfflineChallenges = data.data.challenges.offline || [];
         const floydPlatform = data.user.floyd_platform;
 
         // Update UI
         document.getElementById("username").textContent = data.user.username;
-        // document.getElementById("user-id").textContent = `Floyd ID: ${data.user.user_id}`; // Commented out
         document.getElementById("hydra-username").textContent = `WBID: ${data.user.mk12.hydra_username}`;
         document.getElementById("wins").textContent = parsed.victories;
         document.getElementById("losses").textContent = parsed.losses;
         document.getElementById("floyd-encounters").textContent = raw["Total Times Encountered Floyd"] ?? 0;
-        // document.getElementById("floyd-last-state").textContent = `Floyd Last Match: ${raw["Floyd Last Battle State"]}`;
         document.getElementById("floyd-matches-till").textContent = `${parsed["next_floyd_clue"]}`;
-
-        const hits = meta.hits.profile;
-        const headingContainer = document.getElementById("heading-container");
-
-        trackingH3 = document.createElement("h3");
-        trackingH3.textContent = `Tracking Number #${hits}`;
-        headingContainer.appendChild(trackingH3);
-
-
-        // Offline Mode Stuff
-        let useOfflineMode = false;
-
-        function getActiveGuessedChallenges() {
-            return useOfflineMode ? guessedOfflineChallenges : guessedChallenges;
-        }
-
+        document.getElementById("tracking-number").textContent = `#${Number(meta.hits.profile).toLocaleString()}`;
 
         let floydPlatformMap = platformsMap[floydPlatform || "wb_network"] || platformsMap["wb_network"];
         document.getElementById("platform-image").setAttribute("src", floydPlatformMap.logo);
 
-        // Create challenge checkboxes and labels
-        const challengeSection = document.querySelector(".challenge-section");
         const challengeSectionAll = document.querySelector(".challenge-section-all");
 
-        let use37Bit = false;
+        // Your 10 (js/challenges.js)
+        const { myChallenges, offlineChallenges: offlineIds, oldFormat } = computeMyChallenges(data.data);
 
-        if (
-            guessedChallenges
-            && guessedChallenges.length > 0
-            && guessedChallenges.some(i => parsed.challenges_checklist[i])
-        ) {
-            const mask = BigInt(parsed.challenges_mask);
-            const guessedSet = new Set(guessedChallenges);
+        const myChallengesList = document.getElementById("my-challenges-list");
+        const myProgress = document.getElementById("my-progress");
+        const progressFill = document.getElementById("progress-fill");
+        const offlineChallenges = offlineIds.map(id => ({ id }));
 
-            if (mask <= 1023n) {
-                // 10-bit check
-                const maskIndices = [];
-                for (let i = 0; i < 10; i++) {
-                    if ((mask & (1n << BigInt(i))) !== 0n) {
-                        maskIndices.push(i + 1);
-                    }
-                }
-
-                // If all set bits ARE in guessedChallenges → use 37-bit
-                use37Bit = maskIndices.every(idx => guessedSet.has(idx));
+        function renderMyChallenges(offline) {
+            const list = offline ? offlineChallenges : myChallenges;
+            myChallengesList.replaceChildren(...buildChallengeRows(list, showClue).children);
+            if (offline) {
+                myProgress.textContent = "Not tracked offline";
+                progressFill.style.width = "0%";
             } else {
-                use37Bit = true;
+                const done = list.filter(c => c.done).length;
+                myProgress.textContent = `${done}/${list.length} done`;
+                progressFill.style.width = `${list.length ? done / list.length * 100 : 0}%`;
             }
-
-            const guessedContainer = document.createElement("div");
-            guessedContainer.classList.add("checkbox-container");
-
-            const guessedGroup = document.createElement("div");
-            guessedGroup.classList.add("checkbox-group", "guessed-row");
-
-            const guessedRow = document.createElement("div");
-            guessedRow.classList.add("checkbox-row");
-
-            const checkboxList = guessedChallenges.map((index, i) => {
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.disabled = true;
-
-                if (use37Bit) {
-                    checkbox.checked = ((mask >> BigInt(index - 1)) & 1n) === 1n;
-                } else {
-                    checkbox.checked = (mask & (1n << BigInt(i))) !== 0n;
-                }
-
-                checkbox.dataset.index = index;
-                checkbox.classList.add("challenge-checkbox"); // optional: styling
-
-                return { index, checkbox };
-            });
-
-            // Sort by challenge index
-            checkboxList.sort((a, b) => a.index - b.index);
-
-            // Append sorted checkboxes
-            checkboxList.forEach(({ checkbox }) => {
-                guessedRow.appendChild(createChallengeChip(checkbox));
-            });
-
-            guessedGroup.appendChild(guessedRow);
-            guessedContainer.appendChild(guessedGroup);
-
-            
-            const toggleLabel = document.querySelector(".compact-button-toggler.display-mode");
-            const toggleCheckbox = toggleLabel.querySelector("input");
-            const toggleText = document.createElement("span");
-            toggleLabel.appendChild(toggleText);
-            toggleText.innerHTML = 'Show <u>10</u> Challenges';
-
-            const toggleOfflineLabel = document.querySelector(".compact-button-toggler.offline-mode");
-            if (false && guessedOfflineChallenges && guessedOfflineChallenges.length > 0) // Disabled until working
-            {
-                const toggleOfflineCheckbox = toggleOfflineLabel.querySelector("input");
-                const toggleOfflineText = document.createElement("span");
-                toggleOfflineLabel.appendChild(toggleOfflineText);
-                toggleOfflineText.innerHTML = 'Offline Challenges';    
-            } else {
-                toggleOfflineLabel.remove();
-            }
-            
-
-
-            // Create short version wrapper
-            const shortVersionWrapper = document.getElementById("short-version-container");
-
-            // Append guessedContainer to short wrapper
-            shortVersionWrapper.appendChild(guessedContainer);
-
-            // Toggle behavior
-            toggleCheckbox.addEventListener("change", () => {
-                const checked = toggleCheckbox.checked;
-                shortVersionWrapper.style.display = checked ? "flex" : "none";
-                challengeSectionAll.style.display = checked ? "none" : "flex";
-                toggleText.innerHTML = checked ? 'Show <u>All</u> Challenges' : 'Show <u>10</u> Challenges';
-            });
-            if (!use37Bit) {
-                document.querySelector(".compact-button-toggler input").click();
-            }
-        } else {
-            document.querySelector(".compact-button-toggler").remove();
         }
 
+        if (myChallenges.length) {
+            renderMyChallenges(false);
+        } else {
+            document.getElementById("my-challenges").classList.add("hidden");
+            document.getElementById("no-guess-message").classList.remove("hidden");
+        }
+        document.getElementById("format-note").classList.toggle("hidden", !oldFormat);
 
+        // Offline only exists for platforms with an offline profile (Steam)
+        if (offlineChallenges.length && myChallenges.length) {
+            const modeSwitch = document.getElementById("mode-switch");
+            modeSwitch.classList.remove("hidden");
+            modeSwitch.querySelectorAll("button").forEach(button => {
+                button.addEventListener("click", () => {
+                    modeSwitch.querySelectorAll("button").forEach(b => b.classList.toggle("active", b === button));
+                    renderMyChallenges(button.dataset.mode === "offline");
+                });
+            });
+        }
+
+        // All 37
         const checkboxContainer = document.createElement("div");
         checkboxContainer.classList.add("checkbox-container");
 
         const checkboxGroup = document.createElement("div");
         checkboxGroup.classList.add("checkbox-group");
-        
 
-
-        // const floydChallengesMax = 10;
         const floydChallengesMax = 37;
         const rowLimits = [10, 20, 29, 37];
         let completedChallenges = 0;
@@ -201,15 +170,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         for (let i = 1; i <= floydChallengesMax; i++) {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
-            // checkbox.disabled = true;
             checkbox.checked = parsed.challenges_checklist[i] || false;
             checkbox.dataset.index = i;
             completedChallenges += checkbox.checked;
 
-            checkbox.onclick = async (e) => {
+            checkbox.onclick = (e) => {
                 e.preventDefault();
-                let clue = clues[i-1]
-                alert(`${i}: ${clue.name}\n${clue.requirements}${clue.additional? '\n' + clue.additional: ''}`);
+                showClue(i);
             }
 
             currentRow.appendChild(createChallengeChip(checkbox));
@@ -224,36 +191,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             checkboxGroup.appendChild(currentRow);
         }
 
-
         checkboxContainer.appendChild(checkboxGroup);
         challengeSectionAll.appendChild(checkboxContainer);
 
-
-        // Add Profile Challenges
-        const challengesList = document.getElementById("challenges-list");
-        const challengeDescriptions = {
-            "Fatal Finish": "Do 1 Fatality with 5 characters",
-            "You Finish Yet???": "Do 5 Fatalities with 1 character",
-            "Inner Beast": "Do 2 animalities with 1 character",
-            "Shaolin Monks": "Klassic Ladder as Liu Kang With Kung Lao Kameo",
-            "Door Buster": "Succeed in Baraka's Test Your Might (Chapter 5, Trapped) in Story Mode",
-            "Climb The Pyramid": "Replay Chapter 15 and reach the top of the Pyramid",
-            "Challenge Accepted": "Earn 20 points from Towers of Time Daily/Weekly Challenges",
-            "Quest Keeper": "Complete a Daily Challenge 2 times"
-        };
-
-        const challenges = [
-            { name: "Fatal Finish", key: "fatal_finish" },
-            { name: "You Finish Yet???", key: "you_finish_yet" },
-            { name: "Inner Beast", key: "inner_beast" },
-            { name: "Shaolin Monks", key: "shaolin" },
-            { name: "Door Buster", key: "door_buster" },
-            { name: "Climb The Pyramid", key: "chapter_15" },
-            { name: "Challenge Accepted", key: "tot_points" },
-            { name: "Quest Keeper", key: "daily" },
-        ];
-
-        allCheckboxes = document.querySelectorAll(".challenge-section-all .checkbox-group input");
+        const allCheckboxes = document.querySelectorAll(".challenge-section-all .checkbox-group input");
         let remaining = 0;
 
         if (!guessedChallenges || guessedChallenges.length === 0) {
@@ -268,21 +209,49 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
 
-        const counterSpan = challengeSectionAll.querySelector('span');
-        if (counterSpan) {
-            counterSpan.textContent = `Completed: ${completedChallenges} Remaining: ${remaining}`;
-        }
+        document.getElementById("challenge-counter").textContent = `Completed: ${completedChallenges} Remaining: ${remaining}`;
+        allChallengesSection.classList.remove("hidden");
 
-        challenges.forEach((challenge, challengeIndex) => {
-            const listItem = document.createElement("li");
-            listItem.textContent = `${challengeIndex + 30} - ${challenge.name}: ${parsed[challenge.key] || "Incomplete"}`;
+        // Add Profile Challenges (js/challenges.js), swipeable tiles on phones, grid on desktop
+        const challengesList = document.getElementById("challenges-list");
+        const challengeDescriptions = {
+            "Fatal Finish": "Do 1 Fatality with 5 characters",
+            "You Finish Yet???": "Do 5 Fatalities with 1 character",
+            "Inner Beast": "Do 2 animalities with 1 character",
+            "Shaolin Monks": "Klassic Ladder as Liu Kang With Kung Lao Kameo",
+            "Door Buster": "Succeed in Baraka's Test Your Might (Chapter 5, Trapped) in Story Mode",
+            "Climb The Pyramid": "Replay Chapter 15 and reach the top of the Pyramid",
+            "Challenge Accepted": "Earn 20 points from Towers of Time Daily/Weekly Challenges",
+            "Quest Keeper": "Complete a Daily Challenge 2 times"
+        };
+        const challengeKeys = ["fatal_finish", "you_finish_yet", "inner_beast", "shaolin", "door_buster", "chapter_15", "tot_points", "daily"];
+        const profileChallenges = computeProfileChallenges(raw);
 
-            // Click to show description
-            listItem.onclick = () => {
-                alert(`${challenge.name}: ${challengeDescriptions[challenge.name]}`);
+        profileChallenges.forEach((challenge, challengeIndex) => {
+            const tile = document.createElement("li");
+            tile.className = "profile-tile";
+            tile.classList.toggle("done", challenge.done);
+            tile.innerHTML = `<div class="tile-head"><span class="tile-id">${challenge.id}</span><span class="tile-name"></span></div>`;
+            tile.querySelector(".tile-name").textContent = challenge.name;
+            tile.appendChild(buildSegments(challenge.progress, challenge.target));
+
+            const progress = document.createElement("span");
+            progress.className = "tile-progress";
+            if (challenge.done) {
+                progress.textContent = "Done";
+            } else if (challenge.status) {
+                progress.textContent = challenge.status;
+            } else {
+                progress.textContent = `${Math.min(challenge.progress, challenge.target)}/${challenge.target}${challenge.unit ? ` ${challenge.unit}` : ""}`;
+            }
+            tile.appendChild(progress);
+
+            // Click to show description and the backend's suggestion
+            tile.onclick = () => {
+                showSheet(`${challenge.id}: ${challenge.name}`, `<p>${challengeDescriptions[challenge.name]}</p><p><strong>Status:</strong> ${parsed[challengeKeys[challengeIndex]] || "Incomplete"}</p>`);
             };
 
-            challengesList.appendChild(listItem);
+            challengesList.appendChild(tile);
         });
 
         profileChallengesCard.classList.remove("hidden");
@@ -302,30 +271,60 @@ document.addEventListener("DOMContentLoaded", async function () {
             tacoSection.classList.remove("hidden");
         }
 
-        // Add Fatalities & Animalities
-        const fatalitiesList = document.getElementById("fatalities-list");
-
-        if (raw["Floyd Fatalities Tracker"]) {
-            Object.entries(raw["Floyd Fatalities Tracker"]).forEach(([character, count]) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `Fatalities as ${character}: ${count}`;
-                fatalitiesList.appendChild(listItem);
+        // Fatalities and Animalities, counted against the profile challenges that need them
+        function fillFinishers(tracker, goals, list, section) {
+            const goalList = section.querySelector(".finisher-goals");
+            goals.forEach(goal => {
+                const row = document.createElement("li");
+                row.classList.toggle("done", goal.done);
+                row.innerHTML = `<span class="goal-name"></span><span class="goal-progress"></span>`;
+                row.querySelector(".goal-name").textContent = `${goal.id} ${goal.name}`;
+                row.querySelector(".goal-progress").textContent = goal.done ? "Done" : `${Math.min(goal.progress, goal.target)}/${goal.target}${goal.unit ? ` ${goal.unit}` : ""}`;
+                row.appendChild(buildSegments(goal.progress, goal.target));
+                goalList.appendChild(row);
             });
-        }
 
-        if (raw["Floyd Animalities Tracker"]) {
-            Object.entries(raw["Floyd Animalities Tracker"]).forEach(([character, count]) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `Animalities as ${character}: ${count}`;
-                fatalitiesList.appendChild(listItem);
+            const counts = getFinisherCounts(tracker);
+            counts.forEach(([character, count]) => {
+                const chip = document.createElement("li");
+                chip.textContent = `${character} ×${count}`;
+                list.appendChild(chip);
             });
+            if (!counts.length) {
+                const empty = document.createElement("li");
+                empty.className = "finisher-empty";
+                empty.textContent = "None yet";
+                list.appendChild(empty);
+            }
+            section.classList.remove("hidden");
         }
+        fillFinishers(raw["Floyd Fatalities Tracker"], profileChallenges.filter(c => c.id === 30 || c.id === 31), document.getElementById("fatalities-list"), fatalitiesSection);
+        fillFinishers(raw["Floyd Animalities Tracker"], profileChallenges.filter(c => c.id === 32), document.getElementById("animalities-list"), animalitiesSection);
 
-        fatalitiesSection.classList.remove("hidden");
+        // Pin as mine (js/mychallenges.js), opening the pinned profile again refreshes it
+        const pinButton = document.getElementById("pin-mine");
+        const current = getMyChallenges();
+        if (current && current.userId === userId) {
+            saveMyChallenges(buildPin(username, platform, userId, data.data, current));
+            pinButton.textContent = "Pinned";
+        }
+        pinButton.classList.toggle("hidden", !myChallenges.length);
+        pinButton.addEventListener("click", () => {
+            const previous = getMyChallenges();
+            saveMyChallenges(buildPin(username, platform, userId, data.data, previous && previous.userId === userId ? previous : null));
+            pinButton.textContent = "Pinned";
+            updateMyChallengesButton();
+        });
+
+        const copyButton = document.getElementById("copy-image");
+        copyButton.addEventListener("click", () => copyCardImage(floydDataCard, copyButton, `floyd-${data.user.username}.png`));
 
         // Show Data Sections
         floydDataCard.classList.remove("hidden");
         kofiSection.classList.remove("hidden");
+
+        // Preload so the copy click can reach the clipboard without waiting
+        loadScript(htmlToImageUrl).catch(() => copyButton.classList.add("hidden"));
     } catch (error) {
         errorMessage.textContent = `Error: ${error.message}`;
         errorMessage.classList.remove("hidden");

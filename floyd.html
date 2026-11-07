@@ -13,14 +13,17 @@
     <meta property="og:url" content="https://floydtracker.thethiny.xyz/floyd">
     <link rel="icon" href="assets/PinkFloyd-Square.png" type="image/png">
 
-    <link rel="stylesheet" href="css/style.css?07-11-26_01">
-    <link rel="stylesheet" href="css/floyd.css?07-11-26_01">
+    <link rel="stylesheet" href="css/style.css?07-11-26_02">
+    <link rel="stylesheet" href="css/floyd.css?07-11-26_02">
     <script src="js/platforms.js?05-03-26_01"></script>
     <script src="js/cluesData.js?10-04-25_01"></script>
-    <script src="js/config.js?07-11-26_01"></script>
-    <script src="js/taco.js?07-11-26_01"></script>
-    <script defer src="js/floyd.js?07-11-26_01"></script>
-    <script defer src="js/navbar.js?07-11-26_01"></script>
+    <script src="js/config.js?07-11-26_02"></script>
+    <script src="js/taco.js?07-11-26_02"></script>
+    <script src="js/challenges.js?07-11-26_02"></script>
+    <script src="js/sheet.js?07-11-26_02"></script>
+    <script src="js/mychallenges.js?07-11-26_02"></script>
+    <script defer src="js/floyd.js?07-11-26_02"></script>
+    <script defer src="js/navbar.js?07-11-26_02"></script>
 </head>
 
 <body>
@@ -33,8 +36,12 @@
         <p id="error-message" class="error-message hidden"></p>
 
         <div class="floyd-layout">
-            <!-- Main Floyd Card -->
+            <!-- Main Floyd Card, must fit one phone screenshot -->
             <section id="floyd-data-card" class="card profile-card hidden">
+                <div class="tracking-badge" title="Total profile lookups on the tracker">
+                    <span class="tracking-label">Lookup</span>
+                    <span id="tracking-number"></span>
+                </div>
                 <div class="profile-header">
                     <div class="profile-circle">
                         <img id="profile-image" src="assets/PinkFloyd-Square.png" alt="User Profile">
@@ -63,36 +70,47 @@
                     </div>
                 </div>
 
-                <div class="challenge-section">
-                    <h3 class="section-title">Floyd Challenges</h3>
-                    <div class="challenge-toggles">
-                        <label class="compact-button-toggler display-mode">
-                            <input type="checkbox"/>
-                        </label>
-                        <label class="compact-button-toggler offline-mode">
-                            <input type="checkbox"/>
-                        </label>
+                <div id="my-challenges" class="my-challenges">
+                    <div class="my-challenges-head">
+                        <h3>Your Challenges</h3>
+                        <div id="mode-switch" class="mode-switch hidden">
+                            <button class="active" data-mode="online">Online</button>
+                            <button data-mode="offline">Offline</button>
+                        </div>
+                        <span id="my-progress" class="my-progress"></span>
                     </div>
-                    <div id="short-version-container"></div>
-                    <div class="challenge-section-all">
-                        <!-- Must stay the first span, floyd.js writes the counter into it -->
-                        <span class="challenge-counter">Challenges Completed: </span>
-                        <div class="challenge-legend">
-                            <div class="challenge-legend-item">
-                                <label class="challenge-chip"><input type="checkbox" disabled><span>1</span></label> No Info
-                            </div>
-                            <div class="challenge-legend-item">
-                                <label class="challenge-chip"><input type="checkbox" class="challenge-inactive" disabled><span>1</span></label> Incomplete
-                            </div>
-                            <div class="challenge-legend-item">
-                                <label class="challenge-chip"><input type="checkbox" disabled checked><span>1</span></label> Complete
-                            </div>
+                    <div class="progress-bar"><span id="progress-fill"></span></div>
+                    <ul id="my-challenges-list" class="challenge-list"></ul>
+                    <p id="format-note" class="format-note hidden">Older profile format, use this list over the full 37 grid.</p>
+                </div>
+                <p id="no-guess-message" class="format-note hidden">Your 10 challenges can't be worked out for this platform yet. Use the full 37 grid below.</p>
+
+                <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
+
+                <div class="card-actions">
+                    <a class="button" href="/clues">Clues</a>
+                    <button id="pin-mine" class="button">Pin as mine</button>
+                    <button id="copy-image" class="button">Copy image</button>
+                </div>
+            </section>
+
+            <!-- All 37 Section, above the tower on phones, under kofi on desktop -->
+            <section id="all-challenges-section" class="card all-challenges hidden">
+                <h2>All 37 Challenges</h2>
+                <div class="challenge-section-all">
+                    <span id="challenge-counter" class="challenge-counter"></span>
+                    <div class="challenge-legend">
+                        <div class="challenge-legend-item">
+                            <label class="challenge-chip"><input type="checkbox" disabled><span>1</span></label> Not active
+                        </div>
+                        <div class="challenge-legend-item">
+                            <label class="challenge-chip"><input type="checkbox" class="challenge-inactive" disabled><span>1</span></label> To do
+                        </div>
+                        <div class="challenge-legend-item">
+                            <label class="challenge-chip"><input type="checkbox" disabled checked><span>1</span></label> Done
                         </div>
                     </div>
                 </div>
-
-                <p id="floyd-matches-till" class="floyd-matches-till">Matches Until Floyd Clue: Loading...</p>
-                <a class="button button-primary clues-link" href="/clues">Clues Requirements</a>
             </section>
 
             <div class="floyd-side">
@@ -104,24 +122,33 @@
                     <p id="taco-status" class="taco-status"></p>
                 </section>
 
-                <!-- Profile Challenges Card -->
-                <section id="profile-challenges" class="card hidden">
-                    <h2>Profile Challenges</h2>
-                    <p class="card-subtitle">Tracks challenges 30 to 37. You <b>may or may not</b> have them active.</p>
-                    <ul id="challenges-list" class="row-list clickable-list"></ul>
-                </section>
-
                 <!-- Hints Section -->
                 <section id="hints-section" class="card hidden">
                     <h2>What to Do Next</h2>
                     <ul id="hints-list" class="row-list"></ul>
                 </section>
 
-                <!-- Fatalities & Animalities Section -->
-                <section id="fatalities-section" class="card hidden">
-                    <h2>Fatalities & Animalities</h2>
-                    <ul id="fatalities-list" class="row-list"></ul>
+                <!-- Profile Challenges Card -->
+                <section id="profile-challenges" class="card hidden">
+                    <h2>Profile Challenges</h2>
+                    <p class="card-subtitle">Tracks challenges 30 to 37. You <b>may or may not</b> have them active.</p>
+                    <ul id="challenges-list" class="profile-tiles"></ul>
                 </section>
+
+                <!-- Fatalities Section -->
+                <section id="fatalities-section" class="card hidden">
+                    <h2>Fatalities</h2>
+                    <ul class="finisher-goals"></ul>
+                    <ul id="fatalities-list" class="finisher-chips"></ul>
+                </section>
+
+                <!-- Animalities Section -->
+                <section id="animalities-section" class="card hidden">
+                    <h2>Animalities</h2>
+                    <ul class="finisher-goals"></ul>
+                    <ul id="animalities-list" class="finisher-chips"></ul>
+                </section>
+
             </div>
 
             <!-- Under the card on desktop, last on phones -->
@@ -129,6 +156,7 @@
                 <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support the tracker?', '#C46788', 'D1D219Y0XH');kofiwidget2.draw();</script>
             </div>
         </div>
+
     </main>
 </body>
 </html>

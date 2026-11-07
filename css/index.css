@@ -26,6 +26,47 @@
     flex-shrink: 0;
 }
 
+/* Recent searches */
+.recent-searches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.recent-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 4px 12px 4px 6px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--row);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.recent-chip:hover {
+    background: var(--row-hover);
+}
+
+.recent-chip img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.recent-chip span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* Platforms */
 .platforms {
     display: grid;

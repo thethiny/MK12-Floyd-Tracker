@@ -310,7 +310,185 @@ img {
     margin-top: 24px;
 }
 
-/* Last so it beats the rules above, no !important so inline display toggles (FAQs, clue details) still work */
-.hidden {
+/* Challenge rows, used by the floyd page and the my challenges panel */
+.challenge-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+}
+
+.challenge-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    padding: 4px 9px;
+    border-radius: var(--radius-sm);
+    background: var(--row);
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.challenge-row:hover {
+    background: var(--row-hover);
+}
+
+.challenge-mark {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--text);
+    border-radius: 50%;
+}
+
+.challenge-row.done .challenge-mark {
+    border-color: var(--pale-2);
+    background: var(--pale-2);
+}
+
+.challenge-row.done .challenge-mark::after {
+    content: "✓";
+    display: block;
+    color: var(--card);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 10px;
+    text-align: center;
+}
+
+.challenge-row.untracked .challenge-mark {
+    border-style: dashed;
+}
+
+.challenge-row.done .challenge-name {
+    opacity: 0.75;
+}
+
+.challenge-id {
+    flex-shrink: 0;
+    min-width: 1.4em;
+    font-weight: 800;
+}
+
+.challenge-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Popup: dialog on desktop, slide-up sheet on phones (js/sheet.js) */
+.sheet {
+    width: min(520px, calc(100% - 32px));
+    max-height: min(80vh, 640px);
+    padding: 0;
+    border: none;
+    border-radius: var(--radius);
+    background: var(--card);
+    color: var(--text);
+    box-shadow: var(--shadow);
+}
+
+.sheet::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.sheet-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--card);
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.sheet-title {
+    font-size: 1.1rem;
+}
+
+.sheet-close {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+
+.sheet-body {
+    padding: 4px 16px 16px;
+}
+
+.sheet-body p {
+    margin: 10px 0 0;
+}
+
+.sheet-note {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.sheet-alert {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--row);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.sheet-subtitle {
+    margin-top: 14px;
+    font-size: 0.95rem;
+}
+
+.sheet-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.sheet-back {
+    margin-top: 10px;
+    min-height: 34px;
+    padding: 5px 12px;
+}
+
+@media (max-width: 600px) {
+    .sheet {
+        width: 100%;
+        max-width: none;
+        margin: auto 0 0;
+        border-radius: var(--radius) var(--radius) 0 0;
+        animation: sheet-up 0.2s ease-out;
+    }
+}
+
+@keyframes sheet-up {
+    from { transform: translateY(100%); }
+}
+
+/* Header button for the pinned challenges */
+.my-challenges-button {
+    border: 1px solid var(--line);
+    background: transparent;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Beats any page class setting display, no !important so inline display toggles (FAQs, clue details) still work */
+html .hidden {
     display: none;
 }

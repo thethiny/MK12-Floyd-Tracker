@@ -236,6 +236,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     clueList.appendChild(clearAllButton);
 
+    // Mark the pinned challenges (js/mychallenges.js), again once a stale pin is refetched
+    highlightMyClues();
+    refreshMyChallenges().then(highlightMyClues);
+
     let fullGuideCont = document.getElementById("full-guide-container");
     fullGuideCont.innerHTML = createYoutubeEmbed("https://www.youtube.com/watch?v=JEV3GP5hTqA").innerHTML;
     console.log(fullGuideCont);

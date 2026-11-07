@@ -70,10 +70,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // Last 3 searches as one tap chips on the main page
+    function loadRecentSearches(history) {
+        const recentContainer = document.getElementById("recent-searches");
+        if (!recentContainer) return;
+
+        recentContainer.replaceChildren();
+        history.slice(-3).reverse().forEach(entry => {
+            const chip = document.createElement("button");
+            chip.classList.add("recent-chip");
+            const platformInfo = platformsMap[entry.platform_id];
+            if (platformInfo) {
+                const icon = document.createElement("img");
+                icon.src = platformInfo.logo;
+                icon.alt = "";
+                chip.appendChild(icon);
+            }
+            const name = document.createElement("span");
+            name.textContent = entry.username;
+            chip.appendChild(name);
+            chip.addEventListener("click", () => redirectToFloyd(entry.username, entry.platform_id, entry.floydId));
+            recentContainer.appendChild(chip);
+        });
+        recentContainer.classList.toggle("hidden", history.length === 0);
+    }
+
     function loadHistory() {
         historyList.innerHTML = "";
         const history = getHistory();
         console.log("Loading", history);
+        loadRecentSearches(history);
 
         if (history.length === 0) {
             historyList.innerHTML = "<li>No history yet</li>";

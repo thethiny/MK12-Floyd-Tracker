@@ -40,6 +40,18 @@ function createNavbar() {
         nav.appendChild(anchor);
     });
 
+    // Opens the pinned challenges (js/mychallenges.js), hidden until something is pinned
+    if (typeof showMyChallenges === 'function') {
+        const myChallengesButton = document.createElement('button');
+        myChallengesButton.className = 'nav-link my-challenges-button';
+        myChallengesButton.textContent = 'My Challenges';
+        myChallengesButton.addEventListener('click', () => {
+            header.classList.remove('menu-open');
+            showMyChallenges();
+        });
+        nav.prepend(myChallengesButton);
+    }
+
     menuButton.addEventListener('click', () => {
         const open = header.classList.toggle('menu-open');
         menuButton.setAttribute('aria-expanded', open);
@@ -47,6 +59,7 @@ function createNavbar() {
 
     header.append(brand, menuButton, nav);
     document.body.insertBefore(header, document.body.firstChild);
+    if (typeof updateMyChallengesButton === 'function') updateMyChallengesButton();
 }
 
 // Initialize navbar when DOM is loaded
