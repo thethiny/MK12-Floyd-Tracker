@@ -1,0 +1,244 @@
+/* Hero */
+.search-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    width: min(300px, 70vw);
+    aspect-ratio: 1;
+    background: url('../assets/find_floyd.webp') center / contain no-repeat;
+}
+
+.search-card {
+    width: 100%;
+    max-width: 540px;
+    margin-top: 6px;
+}
+
+.search-login-row {
+    display: flex;
+    gap: 10px;
+}
+
+.search-login-row .button {
+    flex-shrink: 0;
+}
+
+/* Platforms */
+.platforms {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.platform-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.2;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.platform-btn img {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+    filter: grayscale(100%);
+    transition: filter 0.2s;
+}
+
+.platform-btn:hover {
+    background: var(--row);
+}
+
+.platform-btn.selected {
+    border: 2px solid var(--pale);
+    background: var(--row-hover);
+    color: var(--text);
+}
+
+.platform-btn.selected img {
+    filter: grayscale(0%);
+}
+
+.platform-info {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--row);
+    text-align: center;
+}
+
+.selected-platform {
+    margin: 0;
+    font-weight: 700;
+}
+
+.platform-description {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.buttons-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.credits {
+    max-width: 540px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.88rem;
+}
+
+.credits p {
+    margin: 4px 0;
+}
+
+/* Loading */
+.loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.loading-spinner {
+    width: 52px;
+    height: 52px;
+    border: 5px solid var(--row);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* History drawer */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    width: min(340px, 100%);
+    height: 100%;
+    padding: 18px var(--gutter);
+    background: var(--card);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    transform: translateX(105%);
+    transition: transform 0.25s ease;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.toggle-sidebar {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#history-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#history-list > li:not(.history-item) {
+    color: var(--muted);
+    text-align: center;
+    padding: 20px 0;
+}
+
+.history-item {
+    border-radius: var(--radius-sm);
+    background: var(--row);
+    cursor: pointer;
+}
+
+.history-item:hover {
+    background: var(--row-hover);
+}
+
+.history-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+}
+
+.history-icon-img {
+    display: block;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.history-username {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.remove-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.remove-wrapper:hover {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.clear-history {
+    margin-top: 14px;
+}

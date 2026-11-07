@@ -1,1 +1,7 @@
 *.psd
+node_modules/
+package.json
+package-lock.json
+.playwright-cli/
+test_track.mjs
+*.log

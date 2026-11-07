@@ -23,7 +23,7 @@ function redirectToFloyd(username, platform, userId) {
 platforms.forEach(platform => {
     const btn = document.createElement('button');
     btn.classList.add('platform-btn');
-    btn.innerHTML = `<img src="${platform.logo}" alt="${platform.name}">`;
+    btn.innerHTML = `<img src="${platform.logo}" alt=""><span>${platform.name}</span>`;
 
     btn.onclick = () => {
         externalAuthButton.style.display = "none";

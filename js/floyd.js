@@ -1,3 +1,13 @@
+// Checkbox keeps the state, the label draws the number (::after on inputs breaks in Firefox)
+function createChallengeChip(checkbox) {
+    const chip = document.createElement("label");
+    chip.classList.add("challenge-chip");
+    const number = document.createElement("span");
+    number.textContent = checkbox.dataset.index;
+    chip.append(checkbox, number);
+    return chip;
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get("username");
@@ -8,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const profileChallengesCard = document.getElementById("profile-challenges");
     const hintsSection = document.getElementById("hints-section");
     const fatalitiesSection = document.getElementById("fatalities-section");
+    const tacoSection = document.getElementById("taco-section");
     const loadingMessage = document.getElementById("loading-message");
     const errorMessage = document.getElementById("error-message");
 
@@ -43,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("hydra-username").textContent = `WBID: ${data.user.mk12.hydra_username}`;
         document.getElementById("wins").textContent = parsed.victories;
         document.getElementById("losses").textContent = parsed.losses;
-        document.getElementById("floyd-encounters").textContent = `Times Encountered Floyd: ${raw["Total Times Encountered Floyd"]}`;
+        document.getElementById("floyd-encounters").textContent = raw["Total Times Encountered Floyd"] ?? 0;
         // document.getElementById("floyd-last-state").textContent = `Floyd Last Match: ${raw["Floyd Last Battle State"]}`;
         document.getElementById("floyd-matches-till").textContent = `${parsed["next_floyd_clue"]}`;
 
@@ -126,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             // Append sorted checkboxes
             checkboxList.forEach(({ checkbox }) => {
-                guessedRow.appendChild(checkbox);
+                guessedRow.appendChild(createChallengeChip(checkbox));
             });
 
             guessedGroup.appendChild(guessedRow);
@@ -201,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 alert(`${i}: ${clue.name}\n${clue.requirements}${clue.additional? '\n' + clue.additional: ''}`);
             }
 
-            currentRow.appendChild(checkbox);
+            currentRow.appendChild(createChallengeChip(checkbox));
 
             if (rowLimits.includes(i)) {
                 checkboxGroup.appendChild(currentRow);
@@ -284,6 +295,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             hintsList.appendChild(listItem);
         });
         hintsSection.classList.remove("hidden");
+
+        // Add Floyd Tower
+        if (data.data.taco_tower) { // Older backends don't send it
+            renderTacoTower(document.getElementById("taco-towers-container"), document.getElementById("taco-status"), data.data.taco_tower);
+            tacoSection.classList.remove("hidden");
+        }
 
         // Add Fatalities & Animalities
         const fatalitiesList = document.getElementById("fatalities-list");

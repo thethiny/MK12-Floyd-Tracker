@@ -1,39 +1,31 @@
 // Navigation links configuration
 const navLinks = [
     { text: 'Main Menu', href: '/' },
-    { text: 'FAQs', href: '/faqs' },
     { text: 'Challenges', href: '/clues' },
-    { text: 'Google Spreadsheet', href: 'https://thethiny.xyz/floydsheet', target: '_blank' },
+    { text: 'FAQs', href: '/faqs' },
+    { text: 'Google Spreadsheet', href: 'https://thethiny.com/floydsheet', target: '_blank' },
 ];
 
-// Create and initialize the navbar
+// Create and initialize the header
 function createNavbar() {
-    const navbar = document.createElement('nav');
-    navbar.className = 'navbar';
+    const header = document.createElement('header');
+    header.className = 'site-header';
 
-    // Create hamburger button
-    const hamburger = document.createElement('button');
-    hamburger.className = 'hamburger';
-    hamburger.setAttribute('aria-label', 'Toggle navigation');
+    const brand = document.createElement('a');
+    brand.className = 'brand';
+    brand.href = '/';
+    brand.innerHTML = '<img src="/assets/PinkFloyd-Square.png" alt=""><span>Floyd Tracker</span>';
 
-    let link = navLinks.shift(); // Remove first element
-    const mainMenuNav = document.createElement("a");
-    mainMenuNav.href = link.href;
-    mainMenuNav.className = 'nav-link';
-    mainMenuNav.textContent = link.text;
-    
+    const menuButton = document.createElement('button');
+    menuButton.className = 'menu-button';
+    menuButton.setAttribute('aria-label', 'Toggle navigation');
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.innerHTML = '<span></span><span></span><span></span>';
 
-    // Add hamburger spans
-    for (let i = 0; i < 3; i++) {
-        const span = document.createElement('span');
-        hamburger.appendChild(span);
-    }
+    const nav = document.createElement('nav');
+    nav.className = 'nav-links';
 
-    // Create nav links container
-    const navLinksContainer = document.createElement('div');
-    navLinksContainer.className = 'nav-links';
-
-    // Create navigation links
+    const currentPath = window.location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
     navLinks.forEach(link => {
         const anchor = document.createElement('a');
         anchor.href = link.href;
@@ -42,22 +34,19 @@ function createNavbar() {
         if (link.target) {
             anchor.target = link.target;
         }
-        navLinksContainer.appendChild(anchor);
+        if (link.href === currentPath || (link.href === '/' && currentPath === '/index')) {
+            anchor.classList.add('active');
+        }
+        nav.appendChild(anchor);
     });
 
-    // Add elements to navbar
-    navbar.appendChild(hamburger);
-    navbar.appendChild(mainMenuNav);
-    navbar.appendChild(navLinksContainer);
-
-    // Add click event for hamburger menu
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinksContainer.classList.toggle('active');
+    menuButton.addEventListener('click', () => {
+        const open = header.classList.toggle('menu-open');
+        menuButton.setAttribute('aria-expanded', open);
     });
 
-    // Insert navbar at the start of the body
-    document.body.insertBefore(navbar, document.body.firstChild);
+    header.append(brand, menuButton, nav);
+    document.body.insertBefore(header, document.body.firstChild);
 }
 
 // Initialize navbar when DOM is loaded

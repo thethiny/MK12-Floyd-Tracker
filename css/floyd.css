@@ -1,77 +1,76 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: sans-serif;
+/* Layout: one column on phones and tablets, two on desktop */
+.floyd-page .page-heading {
+    margin-bottom: 58px; /* Room for the avatar overlapping the card */
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #d67999;
-    color: white;
+/* Phones: the header already says Floyd Tracker, keep the card in one screenshot */
+@media (max-width: 720px) {
+    .floyd-page {
+        padding-top: 14px;
+    }
+
+    .floyd-page .page-heading h1,
+    .section-title {
+        display: none;
+    }
 }
 
-.gold {
-    color: gold;
+.floyd-layout {
+    display: grid;
+    gap: 18px;
+    max-width: 640px;
+    margin: 0 auto;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    /* max-width: 400px; */
+.floyd-side .card + .card {
+    margin-top: 18px;
+}
+
+@media (min-width: 1000px) {
+    .floyd-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto 1fr; /* Side column's extra height goes to the kofi row */
+        grid-template-areas:
+            "card side"
+            "kofi side";
+        align-items: start;
+        max-width: none;
+    }
+
+    .profile-card {
+        grid-area: card;
+    }
+
+    .floyd-side {
+        grid-area: side;
+    }
+
+    .floyd-layout .kofi-section {
+        grid-area: kofi;
+        margin-top: 0;
+    }
+}
+
+/* Profile */
+.profile-card {
+    padding-top: 0;
     text-align: center;
 }
 
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5em;
-}
-
-#heading-container {
-    margin-bottom: 3em;
-}
-
-#heading-container h1 {
-    margin-bottom: 0.5em;
-}
-
-.floyd-data-card {
+.profile-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    background: #a04f6b;
-    border-radius: 15px;
-    width: 100%;
-    /* max-width: 350px; */
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-    /* background: #a04f6b url("../assets/ui_FloydFound_IF.png") center/cover no-repeat; /* Background image */
-}
-
-/* Profile Image - Overlapping the Card */
-.profile-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
 }
 
 .profile-circle {
-    width: 100px;
-    height: 100px;
+    width: 92px;
+    height: 92px;
+    margin-top: -46px;
+    border: 5px solid var(--card);
     border-radius: 50%;
     overflow: hidden;
-    margin-top: -50px;
-    margin-bottom: 0.25em;
-    position: relative;
-    z-index: 10;
-    border: 5px solid #a04f6b; /* Matches card background */
-    background: #a04f6b; /* Fill color */
+    background: var(--card);
 }
 
 .profile-circle img {
@@ -82,343 +81,302 @@ h1 {
 
 .username-holder {
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-content: center;   
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.username-holder h2 {
+    font-size: 1.4rem;
+    margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .platform-image-container {
+    flex-shrink: 0;
+    display: flex;
     width: 1.5em;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1;
 }
 
-.platform-image-container img {
+#platform-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     border-radius: 50%;
-}
-
-h2 {
-    font-size: 1.5rem;
-    margin-bottom: 5px;
-}
-
-p {
-    font-size: 1rem;
-    margin-bottom: 10px;
+    object-fit: cover;
 }
 
 .hydra {
-    font-size: 0.9rem;
-    color: #ffdfdf;
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
     font-style: italic;
+    overflow-wrap: anywhere;
 }
 
-.win-loss {
-    font-size: 1.2rem;
-    font-weight: bold;
-    background: #c46788;
-    padding: 10px 20px;
-    border-radius: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    text-transform: uppercase; /* Makes it more defined */
-    letter-spacing: 1px;
+/* Stats */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
 }
 
-a.win-loss {
-    text-decoration: none;
-    color: inherit;
-    text-transform: none;
-}
-
-/* Challenges Section */
-.challenge-section {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    text-align: center;
+.stat {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 7px 4px;
+    border-radius: var(--radius-sm);
+    background: var(--row);
+    box-shadow: var(--shadow);
+}
+
+.stat-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Challenges */
+.challenge-section {
+    margin-top: 12px;
+}
+
+.section-title {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.challenge-toggles {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 .compact-button-toggler {
-    /* display: block; */
-    /* margin-top: 10px; */
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-    align-items: start;
-    align-content: center;
-    gap: 0.5em;
-    margin-bottom: 0.5em;
+}
+
+/* The offline toggle stays empty while it's disabled */
+.compact-button-toggler:not(:has(span)) {
+    display: none;
 }
 
 .compact-button-toggler input {
-    /* margin-right: 5px; */
-    /* width: auto; */
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-
-    width: 1em;
-    aspect-ratio: 1/1;
-
     appearance: none;
-    border: 2px solid white;
+    width: 1em;
+    height: 1em;
+    margin: 0;
+    border: 2px solid var(--text);
     border-radius: 50%;
-    background: none;
+    cursor: pointer;
 }
 
 .compact-button-toggler input:checked {
-    background-color: #e08baf;
+    background: var(--row-hover);
 }
 
 #short-version-container {
     display: none;
     justify-content: center;
-    width: 100%;
 }
 
 .challenge-section-all {
-    /* margin-top: 0.5em; */
-    /* margin-bottom: 0.5em; */
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Wrap checkboxes & labels in a column */
-.checkbox-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    width: 85%;
+.challenge-counter {
+    font-weight: 700;
+    font-size: 0.95rem;
 }
 
-/* Row of checkboxes */
-/* .checkbox-group {
+.challenge-legend {
     display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 10px;
     flex-wrap: wrap;
-} */
+    justify-content: center;
+    gap: 4px 14px;
+    margin-top: 4px;
+    font-size: 0.82rem;
+}
+
+.challenge-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.challenge-legend .challenge-chip {
+    --chip: 20px;
+}
+
+.checkbox-container {
+    width: 100%;
+}
 
 .checkbox-group {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    gap: clamp(4px, 1vw, 7px);
     margin-top: 10px;
 }
 
 .checkbox-row {
     display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
-
-.challenge-legend {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    gap: 1em;
-    align-content: center;
     justify-content: center;
-    align-items: center;
+    gap: clamp(3px, 1vw, 6px);
 }
 
-.challenge-legend-item {
-    display: flex;
-    flex-direction: row;
-    flex-shrink: 1;
-    flex-grow: 0;
-    gap: 0.5em;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
+/* Challenge chip: hidden checkbox + visible number */
+.challenge-chip {
+    --chip: clamp(22px, 6.8vw, 34px);
+    position: relative;
+    display: inline-flex;
 }
 
-/* Checkboxes */
-.checkbox-group input, .challenge-legend input {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e08baf;
-    border-radius: 10px;
-    background: transparent;
-    cursor: pointer;
-    transition: background 0.3s, border 0.3s;
-    margin-bottom: 0.7em;
-}
-
-.challenge-legend input {
-    margin: 0;
-}
-
-.checkbox-group input::after, .challenge-legend input::after {
-    content: attr(data-index);
-    font-size: 14px;
-    color: white;
-    font-weight: bold;
+.challenge-chip input {
     position: absolute;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
 }
 
-.challenge-legend input::after {
-    content: "1";
+.challenge-chip input:disabled {
+    cursor: default;
 }
 
+.challenge-chip span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--chip);
+    height: var(--chip);
+    border: 2px solid var(--row-hover);
+    border-radius: 50%;
+    font-size: calc(var(--chip) * 0.42);
+    font-weight: 700;
+    pointer-events: none;
+}
 
-.checkbox-group input.challenge-inactive, .challenge-legend input.challenge-inactive {
-    color: #ddd;
-    font-weight: bold;
+/* Active but not done yet */
+.challenge-chip input.challenge-inactive + span {
     border-color: #3a2a2c;
     background: #6f545a;
+    color: #dddddd;
 }
 
-.checkbox-group input:checked, .challenge-legend input:checked {
-    background: #e08baf;
-    border-color: #ffb6c1;
-    position: relative;
+.challenge-chip input:checked + span {
+    border-color: var(--pale-2);
+    background: var(--row-hover);
 }
 
-.checkbox-group input:checked::after, .challenge-legend input:checked::after {
-    /* content: "✔"; */
-    font-size: 14px;
-    color: white;
-    font-weight: bold;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+.challenge-chip input:focus-visible + span {
+    outline: 2px solid var(--pale);
+    outline-offset: 2px;
 }
 
-/* Labels below checkboxes */
-.checkbox-labels {
-    display: flex;
-    justify-content: center;
-    gap: 9px;
-    flex-wrap: wrap;
-}
-
-.checkbox-labels span {
-    width: 20px;
-    text-align: center;
+.floyd-matches-till {
+    margin: 12px 0 0;
+    font-weight: 700;
     font-size: 0.9rem;
-    color: white;
 }
 
-.hidden {
-    display: none;
+.clues-link {
+    margin-top: 12px;
 }
 
-.error-message {
-    color: #ffcccb;
-    font-size: 1rem;
-}
-
-
-.profile-challenges-card {
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background: #a04f6b;
-    border-radius: 15px;
-    width: 100%;
-    /* max-width: 350px; */
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 1.5em;
-    text-align: center;
-    background: #a04f6b url("../assets/ui_FloydFound_IF.png") center/cover no-repeat; /* Background image */
-}
-
-.profile-challenges-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-#challenges-list {
-    list-style: none;
-    padding: 0;
-    width: 100%;
-}
-
-#challenges-list li {
-    background: #c46788;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: white;
-    text-align: left;
+/* Side cards */
+.clickable-list li {
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.15s;
 }
 
-#challenges-list li:hover {
-    background: #e08baf;
+.clickable-list li:hover {
+    background: var(--row-hover);
 }
 
-.floyd-encounters, .floyd-last-state, .floyd-matches-till {
-    font-size: 1rem;
-    /* margin-top: 10px; */
-    color: white;
-    font-weight: bold;
+/* Game texture behind the profile challenges */
+#profile-challenges {
+    background: var(--card) url("../assets/ui_FloydFound_IF.png") center / cover no-repeat;
 }
 
-.floyd-legend-info {
-    text-align: left;
-}
-
-.info-card {
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background: #a04f6b;
-    border-radius: 15px;
+/* Floyd Tower */
+#taco-towers-container {
     width: 100%;
-    /* max-width: 350px; */
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 1.5em;
+}
+
+.taco-towers {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.taco-tower {
+    fill: rgba(0, 0, 0, 0.22);
+}
+
+.taco-tower .taco-light {
+    fill: rgba(255, 255, 255, 0.25);
+}
+
+.taco-tower-next {
+    fill: var(--pale-2);
+}
+
+.taco-tower-next .taco-light {
+    fill: var(--text);
+}
+
+.taco-label {
+    fill: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+.taco-status {
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--row);
+    font-weight: 600;
+    font-size: 0.9rem;
     text-align: center;
 }
 
-.info-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+.taco-countdown, .taco-time {
+    display: block;
 }
 
-#hints-list, #fatalities-list {
-    list-style: none;
-    padding: 0;
-    width: 100%;
+.taco-countdown {
+    font-size: 1rem;
+    font-weight: 700;
 }
 
-#hints-list li, #fatalities-list li {
-    background: #c46788;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: white;
-    text-align: left;
-}
-
-
-.kofi-section {
-    margin-top: 0.5em;
+.taco-time {
+    color: var(--muted);
 }

@@ -13,29 +13,33 @@
     <meta property="og:url" content="https://floydtracker.thethiny.xyz/clues">
     <link rel="icon" href="assets/PinkFloyd-Square.png" type="image/png">
 
-    <link rel="stylesheet" href="css/style.css?22-03-25_01">
-    <link rel="stylesheet" href="css/floyd.css?22-03-25_01">
-    <link rel="stylesheet" href="css/navbar.css?02-03-25_01">
-    <link rel="stylesheet" href="css/clues.css?02-03-25_01">
+    <link rel="stylesheet" href="css/style.css?07-11-26_01">
+    <link rel="stylesheet" href="css/clues.css?07-11-26_01">
 </head>
 <body>
-    <div class="container">
-        <h1>Floyd Clues</h1>
-        <div id="clues-list" class="info-card">
-            <h2>Clues</h2>
-            <p>Click on a clue to expand the details.</p>
+    <main class="page page-narrow">
+        <div class="page-heading">
+            <h1>Floyd Clues</h1>
+            <p>Tap a clue for its details. Mark it ✅ done, ❎ not working, or ❓ unsure. Your marks stay on this device.</p>
+        </div>
+
+        <section id="clues-list" class="card">
             <ul id="clue-items">
                 <!-- Clue items will be added dynamically with JavaScript -->
             </ul>
-        </div>
-        <div class="info-card">
+        </section>
+
+        <section class="card">
             <h2>All Challenges Guide</h2>
             <div id="full-guide-container"></div>
+        </section>
+
+        <div class="kofi-section">
+            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+            <script type='text/javascript'>kofiwidget2.init('Support the tracker?', '#C46788', 'D1D219Y0XH');kofiwidget2.draw();</script>
         </div>
-    </div>
-    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-    <script type='text/javascript'>kofiwidget2.init('Support the tracker?', '#C46788', 'D1D219Y0XH');kofiwidget2.draw();</script> 
-    <script defer src="js/navbar.js?02-03-25_01"></script>
+    </main>
+    <script defer src="js/navbar.js?07-11-26_01"></script>
     <script src="js/cluesData.js?10-04-25_01"></script>
     <script defer src="js/clues.js?11-02-25_03"></script>
 </body>
